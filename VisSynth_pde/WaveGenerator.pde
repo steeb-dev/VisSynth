@@ -296,26 +296,26 @@ class WaveGenerator
       {
        if(bendAmount > 0)
         {
-          line1EndX = midPoint;
-          line2StartX = midPoint;
+          line1EndX = (int)lerp((float)line1EndX, (float)midPoint, bendAmount);
+          line2StartX = (int)lerp((float)line1EndX, (float)midPoint, bendAmount);
         }
         else
         {
-          line1StartX= midPoint;
-          line2EndX = midPoint;
+          line1StartX = (int)lerp((float)line1StartX, (float)midPoint, bendAmount);
+          line2EndX = (int)lerp((float)line2EndX, (float)midPoint, bendAmount);
         }
       }
       else
       {
        if(bendAmount > 0)
         {
-          line1EndY = midPoint;
-          line2StartY = midPoint;    
+          line1EndY = (int)lerp((float)line1EndY, (float)midPoint, bendAmount);
+          line2StartY = (int)lerp((float)line1EndY, (float)midPoint, bendAmount);
         }
         else
         {
-          line1StartY = midPoint;
-          line2EndY = midPoint;
+          line1StartY = (int)lerp((float)midPoint, (float)line1StartY, bendAmount);
+          line2EndY = (int)lerp((float)midPoint, (float)line2EndY, bendAmount);
         }
       }
     }
