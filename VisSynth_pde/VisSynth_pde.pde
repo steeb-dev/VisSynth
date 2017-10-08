@@ -46,14 +46,7 @@ void draw()
   for(int i = 0; i < waves.length; i++)
   {  
     waves[i].drawWave();
-    if(!waves[i].useVertices)
-    {
-      image(waves[i].buffer, (width - waves[i].buffWidth) /2, 0);
-    }
-    else
-    {
-      shape(waves[i].shapeBuffer, (width - waves[i].buffWidth) /2, 0);
-    }
+    shape(waves[i].shapeBuffer, (width - waves[i].buffWidth) /2, 0);
   }
   
   frame.setTitle(frameRate + " fps");
