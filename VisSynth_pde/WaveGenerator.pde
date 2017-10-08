@@ -1,8 +1,7 @@
 import controlP5.*;
 
 class WaveGenerator
-{  
-  
+{    
   //Properties
   color currentColor;
   color[] waveValues;
@@ -300,7 +299,7 @@ class WaveGenerator
         if(vert)
         {
           if(mask > 0)
-          {
+          { //<>//
              rowEnd = (int)buffWidth;
              rowStart = (int)(mask * buffWidth);          
           }
@@ -421,64 +420,48 @@ class WaveGenerator
     {
       if(vert) 
       {
-        if(bendAmount > 0)
+       if(bendAmount > 0)
         {
-            shapeBuffer.vertex(line1StartX, line1StartY);
-            shapeBuffer.vertex(midPoint, line1EndY);           
-            if(otherVertMode) shapeBuffer.vertex(line1StartX, line1StartY);
-            shapeBuffer.stroke(stroke);
-            shapeBuffer.vertex(midPoint, line2StartY);
-            shapeBuffer.vertex(line2EndX, line2EndY);   
-            if(otherVertMode) shapeBuffer.vertex(midPoint, line2StartY);
-        }      
+          line1EndX = midPoint;
+          line2StartX = midPoint;
+        }
         else
-        {          
-            shapeBuffer.vertex(midPoint, line1StartY);
-            shapeBuffer.vertex(line1EndX, line1EndY);     
-            if(otherVertMode) shapeBuffer.vertex(midPoint, line1StartY);            
-            shapeBuffer.stroke(stroke);
-            shapeBuffer.vertex(line2StartX, line2StartY);
-            shapeBuffer.vertex( midPoint, line2EndY);         
-            if(otherVertMode) shapeBuffer.vertex(line2StartX, line2StartY);
+        {
+          line1StartX= midPoint;
+          line2EndX = midPoint;
         }
       }
       else
       {
-        if(bendAmount > 0)
+       if(bendAmount > 0)
         {
-          shapeBuffer.vertex(line1StartX, line1StartY);
-          shapeBuffer.vertex(line1EndX, midPoint);
-          if(otherVertMode) shapeBuffer.vertex(line1StartX, line1StartY);
-          shapeBuffer.stroke(stroke);
-          shapeBuffer.vertex(line2StartX, midPoint);
-          shapeBuffer.vertex(line2EndX, line2EndY);   
-          if(otherVertMode) shapeBuffer.vertex(line2StartX, midPoint);
-        }   
+          line1EndY = midPoint;
+          line2StartY = midPoint;    
+        }
         else
         {
-          shapeBuffer.vertex(line1StartX, midPoint);
-          shapeBuffer.vertex(line1EndX, line2EndY);
-          if(otherVertMode) shapeBuffer.vertex(line1StartX, midPoint);
-          shapeBuffer.stroke(stroke);
-          shapeBuffer.vertex(line2StartX, line1StartY);
-          shapeBuffer.vertex(line2EndX, midPoint);
-          if(otherVertMode) shapeBuffer.vertex(line2StartX, line1StartY);
+          line1StartY = midPoint;
+          line2EndY = midPoint;
         }
-      }     
+      }
     }
-    else
-    {
-      shapeBuffer.vertex(line1StartX, line1StartY);
-      shapeBuffer.vertex(line1EndX, line1EndY);
-      if(otherVertMode) shapeBuffer.vertex(line1StartX, line1StartY);
-      shapeBuffer.stroke(stroke);
-      shapeBuffer.vertex(line2StartX, line2StartY);
-      shapeBuffer.vertex(line2EndX, line2EndY);    
-      if(otherVertMode) shapeBuffer.vertex(line2StartX, line2StartY);
-    }
-  }
+    shapeBuffer.beginContour();
+    shapeBuffer.vertex(line1StartX, line1StartY);
+    shapeBuffer.vertex(line1EndX, line1EndY);
+    if(otherVertMode) shapeBuffer.vertex(line1StartX, line1StartY);
+    shapeBuffer.endContour();
     
-  void drawSingleVertices(boolean vert, int midPoint, int line1StartX, int line1StartY, int line1EndX, int line1EndY, color stroke)
+    shapeBuffer.stroke(stroke);
+  
+    shapeBuffer.beginContour();   
+    shapeBuffer.vertex(line2StartX, line2StartY);
+    shapeBuffer.vertex(line2EndX, line2EndY);    
+    if(otherVertMode) shapeBuffer.vertex(line2StartX, line2StartY);
+    shapeBuffer.endContour();
+  }
+
+    
+  void drawSingleVertices(boolean vert, int midPoint, int lineStartX, int lineStartY, int lineEndX, int lineEndY, color stroke)
   {
     if(bendAmount != 0)
     {
@@ -486,39 +469,30 @@ class WaveGenerator
       {
        if(bendAmount > 0)
         {
-          shapeBuffer.vertex(line1StartX, line1StartY);
-          shapeBuffer.vertex(midPoint, line1EndY);
-          if(otherVertMode) shapeBuffer.vertex(line1StartX, line1StartY);
-      }
+          lineEndX = midPoint;
+        }
         else
         {
-          shapeBuffer.vertex(midPoint, line1StartY);
-          shapeBuffer.vertex(line1EndX, line1EndY); 
-          if(otherVertMode) shapeBuffer.vertex(midPoint, line1StartY);
+          lineStartX= midPoint;
         }
       }
       else
       {
        if(bendAmount > 0)
         {
-          shapeBuffer.vertex(line1StartX, line1StartY);
-          shapeBuffer.vertex(line1EndX, midPoint);
-          if(otherVertMode) shapeBuffer.vertex(line1StartX, line1StartY);
-
+          lineEndY = midPoint;
         }
         else
         {
-          shapeBuffer.vertex(line1StartX, midPoint);
-          shapeBuffer.vertex(line1EndX, line1EndY);
-          if(otherVertMode) shapeBuffer.vertex(line1StartX, midPoint);
+          lineEndX = midPoint;
         }
       }
     }
-    else
-    {
-      shapeBuffer.vertex(line1StartX, line1StartY);
-      shapeBuffer.vertex(line1EndX, line1EndY);
-      if(otherVertMode) shapeBuffer.vertex(line1StartX, line1StartY);
-    }
+    
+    shapeBuffer.beginContour();
+    shapeBuffer.vertex(lineStartX, lineStartY);
+    shapeBuffer.vertex(lineEndX, lineEndY);
+    if(otherVertMode) shapeBuffer.vertex(lineStartX, lineStartY);
+    shapeBuffer.endContour();
   }
 }

@@ -13,7 +13,7 @@ void setup()
   frameRate(60);
   myBus = new MidiBus(this, "Akai MPD32",-1); 
   cp5 = new ControlP5(this);
-  size(900, 900); 
+  size(900, 900, P3D); 
   waves = new WaveGenerator[4];
   waves[0] = new WaveGenerator(color(255,0,0,255));
   waves[0].setup(0, cp5);
@@ -34,8 +34,7 @@ void setup()
           .setValue(0); 
           
           
-    background(0); 
-  
+    background(0);   
 }
 
 
@@ -56,6 +55,8 @@ void draw()
       shape(waves[i].shapeBuffer, (width - waves[i].buffWidth) /2, 0);
     }
   }
+  
+  frame.setTitle(frameRate + " fps");
 }
 
 void noteOn(int channel, int pitch, int velocity)
