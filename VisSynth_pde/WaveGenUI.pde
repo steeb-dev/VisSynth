@@ -13,6 +13,9 @@ class WaveGenUI
   HSBColourPickr myColorPicker;
   Toggle myVertButton;
   
+  Toggle myFlipHorizButton;
+  Toggle myFlipVertButton;
+  
   void Setup(WaveGenerator _wg, ControlP5 cp5)
   {
      wg = _wg;
@@ -21,12 +24,20 @@ class WaveGenUI
   
      myVertButton = cp5.addToggle("vert" + wg.layerIndex)
            .setPosition(20, yPos)
-            .setSize(15,15);            
+            .setSize(15,15);    
+
+     myFlipHorizButton = cp5.addToggle("hflip" + wg.layerIndex)
+           .setPosition(45, yPos)
+            .setSize(15,15);    
+
+     myFlipVertButton = cp5.addToggle("vflip" + wg.layerIndex)
+           .setPosition(45, yPos + 30)
+            .setSize(15,15);    
                 
      myKnobRate = cp5.addKnob("numWaves " + wg.layerIndex)                
-                 .setRange(1,128.0)
-                 .setValue(40)
-                 .setPosition(70, yPos)
+                 .setRange(1,128)
+                 .setValue(1)
+                 .setPosition(80, yPos)
                  .setRadius(25)
                  .setDragDirection(Knob.HORIZONTAL)
                  ;
@@ -34,7 +45,7 @@ class WaveGenUI
      myKnobTheta = cp5.addKnob("effector "  + wg.layerIndex)
                  .setRange(0.01,1)
                  .setValue(0.2)
-                 .setPosition(135, yPos)
+                 .setPosition(145, yPos)
                  .setRadius(25)
                  .setDragDirection(Knob.HORIZONTAL)
                  ;
@@ -42,7 +53,7 @@ class WaveGenUI
      myKnobOffset = cp5.addKnob("offset " +  wg.layerIndex)
                  .setRange(0, width/2)
                  .setValue(0)
-                 .setPosition(200, yPos)
+                 .setPosition(210, yPos)
                  .setRadius(25)
                  .setDragDirection(Knob.HORIZONTAL)
                  ;
@@ -50,7 +61,7 @@ class WaveGenUI
       myKnobScroll = cp5.addKnob("scroll " +  wg.layerIndex)
                  .setRange(-1, 1)
                  .setValue(0)
-                 .setPosition(265, yPos)
+                 .setPosition(275, yPos)
                  .setRadius(25)
                  .setDragDirection(Knob.HORIZONTAL)
                  ;
@@ -59,7 +70,7 @@ class WaveGenUI
                  .setRange(-1, 1)
                  .setValue(0)
                  .setNumberOfTickMarks(2)
-                 .setPosition(330, yPos)
+                 .setPosition(340, yPos)
                  .setRadius(25)
                  .setDragDirection(Knob.HORIZONTAL)
                  ;
@@ -67,17 +78,17 @@ class WaveGenUI
     myKnobMask = cp5.addKnob("mask " +  wg.layerIndex)
                  .setRange(-1.0, 1.0)
                  .setValue(0)
-                 .setPosition(395, yPos)
+                 .setPosition(405, yPos)
                  .setRadius(25)
                  .setDragDirection(Knob.HORIZONTAL)
                  ;
                  
     myKnobWaveForm = cp5.addKnob("waveForm " +  wg.layerIndex)
-                 .setRange(1, 5)
+                 .setRange(1, 3)
                  .setValue(1)
-                 .setNumberOfTickMarks(4)
+                 .setNumberOfTickMarks(2)
                  .snapToTickMarks(true)
-                 .setPosition(460, yPos)
+                 .setPosition(470, yPos)
                  .setRadius(25)
                  .setDragDirection(Knob.HORIZONTAL)
                  ;
@@ -98,7 +109,7 @@ class WaveGenUI
       updateBuffer = true;
     }  
     
-    int newWaves  = (int)myKnobRate.getValue();
+    float newWaves  = myKnobRate.getValue();
     if(newWaves != wg.numWaves)
     {
       wg.numWaves = newWaves;
@@ -132,6 +143,8 @@ class WaveGenUI
     wg.offset = myKnobOffset.getValue();
     wg.bendAmount = myKnobBend.getValue();
     wg.mask = myKnobMask.getValue();
+    wg.flipHoriz = myFlipHorizButton.getBooleanValue();
+    wg.flipVert = myFlipVertButton.getBooleanValue();
     if(updateBuffer){  wg.prepWaveBuffer();}
   }
 }

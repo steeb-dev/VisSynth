@@ -9,8 +9,6 @@ ControlP5 cp5;
 WaveGenerator[] waves;
 CallbackListener cb;
 
-PShape shapeBuffer;
-
 void setup()
 {  
   frameRate(60);
@@ -45,16 +43,24 @@ void draw()
 {
   if(!myClearBufferButton.getBooleanValue())
     background(0);   
-  
-  shapeBuffer = createShape();
-  shapeBuffer.beginShape();
+
     
   for(int i = 0; i < waves.length; i++)
   {  
-    waves[i].drawWave(shapeBuffer);
+    waves[i].drawWave();
+    int x = (int)((width - waves[0].buffWidth) /2);
+    int y = 0;
+    if(waves[i].flipHoriz)
+    {
+      x += waves[i].buffWidth;
+    }
+    if(waves[i].flipVert)
+    {
+      y += waves[i].buffHeight;
+    }
+
+    shape(waves[i].shapeBuffer,  x,y);
   }
-  shapeBuffer.endShape(CLOSE);
-  shape(shapeBuffer, (width - waves[0].buffWidth) /2, 0);
   
   surface.setTitle(frameRate + " fps");
 }
