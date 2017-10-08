@@ -12,7 +12,9 @@ class WaveGenUI
   
   HSBColourPickr myColorPicker;
   Toggle myVertButton;
-  
+  Toggle myUseVerticesButton;
+  Toggle myOtherVerticesButton;
+    
   void Setup(WaveGenerator _wg, ControlP5 cp5)
   {
      wg = _wg;
@@ -22,9 +24,16 @@ class WaveGenUI
      myVertButton = cp5.addToggle("vert" + wg.layerIndex)
            .setPosition(20, yPos)
             .setSize(15,15);            
-                 
-                 
-      myKnobRate = cp5.addKnob("numWaves " + wg.layerIndex)                
+     
+     myUseVerticesButton = cp5.addToggle("vertices" + wg.layerIndex)
+           .setPosition(20, yPos + 30)
+            .setSize(15,15);  
+                
+      myOtherVerticesButton = cp5.addToggle("x" + wg.layerIndex)
+           .setPosition(40, yPos + 30)
+            .setSize(15,15);   
+            
+     myKnobRate = cp5.addKnob("numWaves " + wg.layerIndex)                
                  .setRange(1,128.0)
                  .setValue(40)
                  .setPosition(70, yPos)
@@ -94,6 +103,8 @@ class WaveGenUI
     boolean toggleVal = myVertButton.getBooleanValue();
     wg.waveType = (int)myKnobWaveForm.getValue();
     
+    wg.useVertices = myUseVerticesButton.getBooleanValue();
+    wg.otherVertMode = myOtherVerticesButton.getBooleanValue();
     if(toggleVal != wg.vertical)
     {
       wg.vertical = toggleVal;

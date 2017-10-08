@@ -15,6 +15,10 @@ class WaveGenerator
   int scrollRate = 0;
   boolean vertical = false; 
   PGraphics buffer;
+  PShape shapeBuffer;
+  boolean useVertices;
+  boolean otherVertMode;
+  
   int layerIndex; 
   float mask;
   int waveType;
@@ -157,8 +161,17 @@ class WaveGenerator
 
     wgUI.UpdateControls();
     calcWave();
-    buffer.beginDraw();
-    buffer.clear();
+    if(!useVertices)
+    {
+      buffer.beginDraw();
+      buffer.clear();
+    }
+    else
+    {      
+      shapeBuffer = createShape();
+      shapeBuffer.beginShape();
+    }
+    
     if(!vertical)
     {
       drawHoriz();      
@@ -167,7 +180,14 @@ class WaveGenerator
     {
       drawVert();
     }
-    buffer.endDraw();
+    if(!useVertices)
+    {    
+      buffer.endDraw();
+    }
+    else
+    {
+       shapeBuffer.endShape(CLOSE);
+    }
   }
   
   void drawHoriz()
@@ -185,12 +205,29 @@ class WaveGenerator
       if(offset>0)
       {
         if(sineOffset > buffWidth) sineOffset = sineOffset - (int)buffWidth;
-        if(draw) drawOffsetLines(false, midPoint, 0, tempy, sineOffset, tempy, sineOffset, tempy, (int)buffWidth, tempy, waveValues[i]);
+         if(!useVertices)
+        {
+           drawOffsetLines(false, midPoint, 0, tempy, sineOffset, tempy, sineOffset, tempy, (int)buffWidth, tempy, waveValues[i]);
+        }
+        else
+        {
+           drawOffsetVertices(false, midPoint, 0, tempy, sineOffset, tempy, sineOffset, tempy, (int)buffWidth, tempy, waveValues[i]);
+        }
         sineOffset += offset; 
       }
       else
       {
-        if(draw) drawSingleLine(false, midPoint, 0, tempy, (int)buffWidth, tempy, waveValues[i]);
+        if(draw) 
+        {
+          if(!useVertices)
+          {
+             drawSingleLine(false, midPoint, 0, tempy, (int)buffWidth, tempy, waveValues[i]);
+          }
+          else
+          {
+             drawSingleVertices(false, midPoint, 0, tempy, (int)buffWidth, tempy, waveValues[i]);
+          }
+        }
       }   
       i++;
       if(i >= waveValues.length)
@@ -217,12 +254,32 @@ class WaveGenerator
       if(offset>0)
       {
         if(sineOffset > buffHeight) sineOffset = sineOffset -  (int)buffHeight;
-        if(draw) drawOffsetLines(true, midPoint, tempx, 0, tempx, sineOffset, tempx, sineOffset, tempx, (int)buffHeight, waveValues[i]);    
+        if(draw) 
+        {
+          if(!useVertices)
+          {
+            drawOffsetLines(true, midPoint, tempx, 0, tempx, sineOffset, tempx, sineOffset, tempx, (int)buffHeight, waveValues[i]);    
+          }
+          else
+          {
+            drawOffsetVertices(true, midPoint, tempx, 0, tempx, sineOffset, tempx, sineOffset, tempx, (int)buffHeight, waveValues[i]);    
+          }
+        }
         sineOffset += offset; 
       }
       else
-      {
-        if(draw) drawSingleLine(true, midPoint, tempx, 0, tempx, (int)buffHeight, waveValues[i]);
+      {  
+         if(draw)
+         {
+           if(!useVertices)
+            {
+              drawSingleLine(true, midPoint, tempx, 0, tempx, (int)buffHeight, waveValues[i]);
+            }
+            else
+            {
+             drawSingleVertices(true, midPoint, tempx, 0, tempx, (int)buffHeight, waveValues[i]);
+            }
+         }
       }   
       i++;
       if(i >= waveValues.length)
@@ -326,11 +383,11 @@ class WaveGenerator
   void drawSingleLine(boolean vert, int midPoint, int line1StartX, int line1StartY, int line1EndX, int line1EndY, color stroke)
   {
     buffer.stroke(stroke);
-    if(bendAmount != 0)
+    if(bendAmount != 0.0)
     {
       if(vert) 
       {
-       if(bendAmount > 0)
+       if(bendAmount > 0.0)
         {
           buffer.line(line1StartX, line1StartY, midPoint, line1EndY);           
         }
@@ -341,7 +398,7 @@ class WaveGenerator
       }
       else
       {
-       if(bendAmount > 0)
+       if(bendAmount > 0.0)
         {
           buffer.line(line1StartX, line1StartY, line1EndX, midPoint);
         }
@@ -354,6 +411,114 @@ class WaveGenerator
     else
     {
       buffer.line(line1StartX, line1StartY, line1EndX, line1EndY);
+    }
+  }
+  
+  
+  void drawOffsetVertices(boolean vert, int midPoint, int line1StartX, int line1StartY, int line1EndX, int line1EndY, int line2StartX, int line2StartY, int line2EndX, int line2EndY, color stroke)
+  {
+    if(bendAmount != 0)
+    {
+      if(vert) 
+      {
+        if(bendAmount > 0)
+        {
+            shapeBuffer.vertex(line1StartX, line1StartY);
+            shapeBuffer.vertex(midPoint, line1EndY);           
+            if(otherVertMode) shapeBuffer.vertex(line1StartX, line1StartY);
+            shapeBuffer.stroke(stroke);
+            shapeBuffer.vertex(midPoint, line2StartY);
+            shapeBuffer.vertex(line2EndX, line2EndY);   
+            if(otherVertMode) shapeBuffer.vertex(midPoint, line2StartY);
+        }      
+        else
+        {          
+            shapeBuffer.vertex(midPoint, line1StartY);
+            shapeBuffer.vertex(line1EndX, line1EndY);     
+            if(otherVertMode) shapeBuffer.vertex(midPoint, line1StartY);            
+            shapeBuffer.stroke(stroke);
+            shapeBuffer.vertex(line2StartX, line2StartY);
+            shapeBuffer.vertex( midPoint, line2EndY);         
+            if(otherVertMode) shapeBuffer.vertex(line2StartX, line2StartY);
+        }
+      }
+      else
+      {
+        if(bendAmount > 0)
+        {
+          shapeBuffer.vertex(line1StartX, line1StartY);
+          shapeBuffer.vertex(line1EndX, midPoint);
+          if(otherVertMode) shapeBuffer.vertex(line1StartX, line1StartY);
+          shapeBuffer.stroke(stroke);
+          shapeBuffer.vertex(line2StartX, midPoint);
+          shapeBuffer.vertex(line2EndX, line2EndY);   
+          if(otherVertMode) shapeBuffer.vertex(line2StartX, midPoint);
+        }   
+        else
+        {
+          shapeBuffer.vertex(line1StartX, midPoint);
+          shapeBuffer.vertex(line1EndX, line2EndY);
+          if(otherVertMode) shapeBuffer.vertex(line1StartX, midPoint);
+          shapeBuffer.stroke(stroke);
+          shapeBuffer.vertex(line2StartX, line1StartY);
+          shapeBuffer.vertex(line2EndX, midPoint);
+          if(otherVertMode) shapeBuffer.vertex(line2StartX, line1StartY);
+        }
+      }     
+    }
+    else
+    {
+      shapeBuffer.vertex(line1StartX, line1StartY);
+      shapeBuffer.vertex(line1EndX, line1EndY);
+      if(otherVertMode) shapeBuffer.vertex(line1StartX, line1StartY);
+      shapeBuffer.stroke(stroke);
+      shapeBuffer.vertex(line2StartX, line2StartY);
+      shapeBuffer.vertex(line2EndX, line2EndY);    
+      if(otherVertMode) shapeBuffer.vertex(line2StartX, line2StartY);
+    }
+  }
+    
+  void drawSingleVertices(boolean vert, int midPoint, int line1StartX, int line1StartY, int line1EndX, int line1EndY, color stroke)
+  {
+    if(bendAmount != 0)
+    {
+      if(vert) 
+      {
+       if(bendAmount > 0)
+        {
+          shapeBuffer.vertex(line1StartX, line1StartY);
+          shapeBuffer.vertex(midPoint, line1EndY);
+          if(otherVertMode) shapeBuffer.vertex(line1StartX, line1StartY);
+      }
+        else
+        {
+          shapeBuffer.vertex(midPoint, line1StartY);
+          shapeBuffer.vertex(line1EndX, line1EndY); 
+          if(otherVertMode) shapeBuffer.vertex(midPoint, line1StartY);
+        }
+      }
+      else
+      {
+       if(bendAmount > 0)
+        {
+          shapeBuffer.vertex(line1StartX, line1StartY);
+          shapeBuffer.vertex(line1EndX, midPoint);
+          if(otherVertMode) shapeBuffer.vertex(line1StartX, line1StartY);
+
+        }
+        else
+        {
+          shapeBuffer.vertex(line1StartX, midPoint);
+          shapeBuffer.vertex(line1EndX, line1EndY);
+          if(otherVertMode) shapeBuffer.vertex(line1StartX, midPoint);
+        }
+      }
+    }
+    else
+    {
+      shapeBuffer.vertex(line1StartX, line1StartY);
+      shapeBuffer.vertex(line1EndX, line1EndY);
+      if(otherVertMode) shapeBuffer.vertex(line1StartX, line1StartY);
     }
   }
 }

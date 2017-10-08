@@ -5,12 +5,12 @@ MidiBus myBus; // The MidiBus
 int currentMidiIndex;
 boolean doFeedBack = false;
 Toggle myClearBufferButton;
-
 ControlP5 cp5;
 WaveGenerator[] waves;
 CallbackListener cb;
 void setup()
 {  
+  frameRate(60);
   myBus = new MidiBus(this, "Akai MPD32",-1); 
   cp5 = new ControlP5(this);
   size(900, 900); 
@@ -47,7 +47,14 @@ void draw()
   for(int i = 0; i < waves.length; i++)
   {  
     waves[i].drawWave();
-    image(waves[i].buffer, (width - waves[i].buffWidth) /2, 0);
+    if(!waves[i].useVertices)
+    {
+      image(waves[i].buffer, (width - waves[i].buffWidth) /2, 0);
+    }
+    else
+    {
+      shape(waves[i].shapeBuffer, (width - waves[i].buffWidth) /2, 0);
+    }
   }
 }
 
