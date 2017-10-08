@@ -13,7 +13,7 @@ class WaveGenerator
   int scrollOffset = 0;
   int scrollRate = 0;
   boolean vertical = false; 
-  PShape shapeBuffer;
+
   boolean useVertices;
   boolean otherVertMode;
   
@@ -153,26 +153,23 @@ class WaveGenerator
   }
 
 
-  void drawWave()
+  void drawWave(PShape shapeBuffer)
   {    
 
     wgUI.UpdateControls();
     calcWave();
-    shapeBuffer = createShape();
-    shapeBuffer.beginShape();
-    
+  
     if(!vertical)
     {
-      drawHoriz();      
+      drawHoriz(shapeBuffer);      
     }
     else
     {
-      drawVert();
+      drawVert(shapeBuffer);
     }
-     shapeBuffer.endShape(CLOSE);
   }
   
-  void drawHoriz()
+  void drawHoriz(PShape shapeBuffer)
   {    
     int midPoint = (int)buffHeight / 2;
 
@@ -187,14 +184,14 @@ class WaveGenerator
       if(offset>0)
       {
         if(sineOffset > buffWidth) sineOffset = sineOffset - (int)buffWidth;
-        if(draw) drawOffsetVertices(false, midPoint, 0, tempy, sineOffset, tempy, sineOffset, tempy, (int)buffWidth, tempy, waveValues[i]);
+        if(draw) drawOffsetVertices(shapeBuffer, false, midPoint, 0, tempy, sineOffset, tempy, sineOffset, tempy, (int)buffWidth, tempy, waveValues[i]);
         sineOffset += offset; 
       }
       else
       {
         if(draw) 
         {
-           drawSingleVertices(false, midPoint, 0, tempy, (int)buffWidth, tempy, waveValues[i]);
+           drawSingleVertices(shapeBuffer, false, midPoint, 0, tempy, (int)buffWidth, tempy, waveValues[i]);
         }
       }   
       i++;
@@ -205,7 +202,7 @@ class WaveGenerator
     } 
   }
     
-  void drawVert()
+  void drawVert(PShape shapeBuffer)
   {    
     int midPoint = (int)buffWidth / 2;
     
@@ -224,7 +221,7 @@ class WaveGenerator
         if(sineOffset > buffHeight) sineOffset = sineOffset -  (int)buffHeight;
         if(draw) 
         {
-          drawOffsetVertices(true, midPoint, tempx, 0, tempx, sineOffset, tempx, sineOffset, tempx, (int)buffHeight, waveValues[i]);    
+          drawOffsetVertices(shapeBuffer, true, midPoint, tempx, 0, tempx, sineOffset, tempx, sineOffset, tempx, (int)buffHeight, waveValues[i]);    
         }
         sineOffset += offset; 
       }
@@ -232,7 +229,7 @@ class WaveGenerator
       {  
          if(draw)
          {
-           drawSingleVertices(true, midPoint, tempx, 0, tempx, (int)buffHeight, waveValues[i]);
+           drawSingleVertices(shapeBuffer, true, midPoint, tempx, 0, tempx, (int)buffHeight, waveValues[i]);
          }
       }   
       i++;
@@ -291,7 +288,7 @@ class WaveGenerator
       return draw;
   }    
   
-  void drawOffsetVertices(boolean vert, int midPoint, int line1StartX, int line1StartY, int line1EndX, int line1EndY, int line2StartX, int line2StartY, int line2EndX, int line2EndY, color stroke)
+  void drawOffsetVertices(PShape shapeBuffer, boolean vert, int midPoint, int line1StartX, int line1StartY, int line1EndX, int line1EndY, int line2StartX, int line2StartY, int line2EndX, int line2EndY, color stroke)
   {
     if(bendAmount != 0)
     {
@@ -338,7 +335,7 @@ class WaveGenerator
   }
 
     
-  void drawSingleVertices(boolean vert, int midPoint, int lineStartX, int lineStartY, int lineEndX, int lineEndY, color stroke)
+  void drawSingleVertices(PShape shapeBuffer, boolean vert, int midPoint, int lineStartX, int lineStartY, int lineEndX, int lineEndY, color stroke)
   {
     if(bendAmount != 0)
     {

@@ -8,6 +8,9 @@ Toggle myClearBufferButton;
 ControlP5 cp5;
 WaveGenerator[] waves;
 CallbackListener cb;
+
+PShape shapeBuffer;
+
 void setup()
 {  
   frameRate(60);
@@ -43,11 +46,15 @@ void draw()
   if(!myClearBufferButton.getBooleanValue())
     background(0);   
   
+  shapeBuffer = createShape();
+  shapeBuffer.beginShape();
+    
   for(int i = 0; i < waves.length; i++)
   {  
-    waves[i].drawWave();
-    shape(waves[i].shapeBuffer, (width - waves[i].buffWidth) /2, 0);
+    waves[i].drawWave(shapeBuffer);
   }
+  shapeBuffer.endShape(CLOSE);
+  shape(shapeBuffer, (width - waves[0].buffWidth) /2, 0);
   
   frame.setTitle(frameRate + " fps");
 }
