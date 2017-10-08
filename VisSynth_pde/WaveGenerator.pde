@@ -18,9 +18,7 @@ class WaveGenerator
   boolean flipHoriz = false;
   
   PShape shapeBuffer;
-  boolean useVertices;
-  boolean otherVertMode;
-  
+
   int layerIndex; 
   float mask;
   int waveType;
@@ -29,7 +27,8 @@ class WaveGenerator
   float buffHeight;
   WaveGenUI wgUI;
   float bendAmount; 
-   
+  LFO lfo1;
+  
   //Wave Type constants
   final static int SINE = 1;
   final static int PULSE = 2;
@@ -41,6 +40,8 @@ class WaveGenerator
   WaveGenerator(color c)
   {
     currentColor = c;
+    lfo1 = new LFO();
+    lfo1.isActive = false;
   }
 
   void setup(int index, ControlP5 cp5)
@@ -133,6 +134,7 @@ class WaveGenerator
     shapeBuffer = createShape();
     shapeBuffer.beginShape();
     wgUI.UpdateControls();
+    lfo1.update();
     calcWave();
   
     if(!vertical)
@@ -308,7 +310,6 @@ class WaveGenerator
     shapeBuffer.beginContour();
     shapeBuffer.vertex(line1StartX, line1StartY);
     shapeBuffer.vertex(line1EndX, line1EndY);
-    if(otherVertMode) shapeBuffer.vertex(line1StartX, line1StartY);
     shapeBuffer.endContour();
     
     shapeBuffer.stroke(stroke);
@@ -316,7 +317,6 @@ class WaveGenerator
     shapeBuffer.beginContour();   
     shapeBuffer.vertex(line2StartX, line2StartY);
     shapeBuffer.vertex(line2EndX, line2EndY);    
-    if(otherVertMode) shapeBuffer.vertex(line2StartX, line2StartY);
     shapeBuffer.endContour();
   }
 
@@ -355,7 +355,6 @@ class WaveGenerator
     shapeBuffer.beginContour();
     shapeBuffer.vertex(lineStartX, lineStartY);
     shapeBuffer.vertex(lineEndX, lineEndY);
-    if(otherVertMode) shapeBuffer.vertex(lineStartX, lineStartY);
     shapeBuffer.endContour();
   }
 }
