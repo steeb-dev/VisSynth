@@ -56,7 +56,7 @@ void draw()
   shapeBuffer.endShape(CLOSE);
   shape(shapeBuffer, (width - waves[0].buffWidth) /2, 0);
   
-  frame.setTitle(frameRate + " fps");
+  surface.setTitle(frameRate + " fps");
 }
 
 void noteOn(int channel, int pitch, int velocity)
