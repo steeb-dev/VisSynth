@@ -343,22 +343,22 @@ class WaveGenerator
       {
        if(bendAmount > 0)
         {
-          lineEndX = midPoint;
+          lineEndX = (int)lerp((float)lineEndX, (float)midPoint, bendAmount);
         }
         else
         {
-          lineStartX= midPoint;
+          lineStartX = (int)lerp((float)midPoint, (float)lineStartX, bendAmount);
         }
       }
       else
       {
        if(bendAmount > 0)
         {
-          lineEndY = midPoint;
+          lineEndY = (int)lerp((float)lineEndY, (float)midPoint, bendAmount);
         }
         else
         {
-          lineStartY = midPoint;
+          lineStartY = (int)lerp((float)midPoint, (float)lineStartY, bendAmount);
         }
       }
     }

@@ -59,7 +59,6 @@ class WaveGenUI
                  .setRange(-1, 1)
                  .setValue(0)
                  .setNumberOfTickMarks(2)
-                 .snapToTickMarks(true)
                  .setPosition(330, yPos)
                  .setRadius(25)
                  .setDragDirection(Knob.HORIZONTAL)
