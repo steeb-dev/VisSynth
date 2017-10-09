@@ -30,6 +30,8 @@ class WaveGenerator
   LFO lfo1;
   LFO lfo2;
   
+  int frameDraw = 1;
+  
   //Wave Type constants
   final static int SINE = 1;
   final static int PULSE = 2;
@@ -131,33 +133,36 @@ class WaveGenerator
     }
   }
 
-  void drawWave()
+  void drawWave(int frameCounter)
   {    
-  
-    shapeBuffer = createShape();
-    shapeBuffer.beginShape();
     wgUI.UpdateControls();
     lfo1.update();    
     lfo2.update();
-    calcWave();
-  
-    if(!vertical)
+   
+    if(frameCounter % frameDraw == 0)
     {
-      drawHoriz();      
-    }
-    else
-    {
-      drawVert();
-    }
+      shapeBuffer = createShape();
+      shapeBuffer.beginShape();
+      calcWave();
     
-    shapeBuffer.endShape(CLOSE);
-    if(flipHoriz)
-    {
-      shapeBuffer.scale(-1,1);
-    }
-    if(flipVert)
-    {
-      shapeBuffer.scale(1,-1);
+      if(!vertical)
+      {
+        drawHoriz();      
+      }
+      else
+      {
+        drawVert();
+      }
+      
+      shapeBuffer.endShape(CLOSE);
+      if(flipHoriz)
+      {
+        shapeBuffer.scale(-1,1);
+      }
+      if(flipVert)
+      {
+        shapeBuffer.scale(1,-1);
+      }
     }
   }
   

@@ -8,6 +8,7 @@ Toggle myClearBufferButton;
 ControlP5 cp5;
 WaveGenerator[] waves;
 CallbackListener cb;
+int frameCounter;
 
 void setup()
 {  
@@ -43,13 +44,22 @@ void setup()
 
 void draw()
 {
+  frameCounter++;
+  if(frameCounter > 4)
+    frameCounter = 1;
   if(!myClearBufferButton.getBooleanValue())
-    background(0);   
+    background(0);  
+  else
+  {
+    stroke(0, 0, 0, 0);
+    fill(0);
+    rect(0, waves[0].buffHeight, width, height - waves[0].buffHeight);
+  }
 
     
   for(int i = 0; i < waves.length; i++)
   {  
-    waves[i].drawWave();
+    waves[i].drawWave(frameCounter);
     int x = (int)((width - waves[0].buffWidth) /2);
     int y = 0;
     if(waves[i].flipHoriz)
@@ -74,7 +84,7 @@ void drawSelectedMidi()
   int index = currentMidiIndex + 1;
   stroke(255);
   fill(0, 0, 0, 0);
-  rect(width / 2 - 625 , (int)waves[0].buffHeight + (index * 78), 1125, 75);
+  rect(width / 2 - 690 , (int)waves[0].buffHeight + (index * 78), 1190, 75);
 }
 
 //MIDI Handling
@@ -99,8 +109,9 @@ void controllerChange(int channel, int number, int value) {
   else  
   {
     Knob knob;
+    int newTarget;   
     switch(number)
-    {      
+    {   
       //1-8 - continous knobs 
       case 1:
         knob = waves[currentMidiIndex].wgUI.myKnobRate;
@@ -130,6 +141,10 @@ void controllerChange(int channel, int number, int value) {
         knob = waves[currentMidiIndex].wgUI.myKnobWaveForm;
         HandleKnobChange(knob, value);       
       break;
+      case 8:
+        knob = waves[currentMidiIndex].wgUI.myKnobFrameDraw;
+        HandleKnobChange(knob, value);       
+      break;
      case 13:
         knob = waves[currentMidiIndex].wgUI.myKnobLFO1Rate;
         HandleKnobChange(knob, value);       
@@ -156,17 +171,45 @@ void controllerChange(int channel, int number, int value) {
         break;
       case 19:
         waves[currentMidiIndex].wgUI.myFlipHorizButton.setValue(!waves[currentMidiIndex].wgUI.myFlipHorizButton.getBooleanValue());
-       break;
+        break;
       case 20:
         waves[currentMidiIndex].wgUI.myFlipVertButton.setValue(!waves[currentMidiIndex].wgUI.myFlipVertButton.getBooleanValue());
         break;
-      case 21:
-        waves[currentMidiIndex].wgUI.myFlipVertButton.setValue(!waves[currentMidiIndex].wgUI.myFlipVertButton.getBooleanValue());
-        break;
+      case 21:  
+        newTarget = (int)waves[currentMidiIndex].wgUI.myKnobLFO1Target.getValue();
+        newTarget--; 
+        if(newTarget < 0)
+        {
+          newTarget = (int)waves[currentMidiIndex].wgUI.myKnobLFO1Target.getMax();
+        }
+        waves[currentMidiIndex].wgUI.myKnobLFO1Target.setValue(newTarget);
+       break;
       case 22:
-        waves[currentMidiIndex].wgUI.myFlipVertButton.setValue(!waves[currentMidiIndex].wgUI.myFlipVertButton.getBooleanValue());
+        newTarget = (int)waves[currentMidiIndex].wgUI.myKnobLFO1Target.getValue();
+        newTarget++; 
+        if(newTarget > (int)waves[currentMidiIndex].wgUI.myKnobLFO1Target.getMax())
+        {
+          newTarget = 0;
+        }
+        waves[currentMidiIndex].wgUI.myKnobLFO1Target.setValue(newTarget);
         break;
-
+      case 23:
+        newTarget = (int)waves[currentMidiIndex].wgUI.myKnobLFO2Target.getValue();
+        newTarget--; 
+        if(newTarget < 0)
+        {
+          newTarget = (int)waves[currentMidiIndex].wgUI.myKnobLFO2Target.getMax();
+        }
+        waves[currentMidiIndex].wgUI.myKnobLFO2Target.setValue(newTarget);
+       break;
+      case 24:
+        newTarget = (int)waves[currentMidiIndex].wgUI.myKnobLFO2Target.getValue();
+        newTarget++; 
+        if(newTarget > (int)waves[currentMidiIndex].wgUI.myKnobLFO2Target.getMax())
+        {
+          newTarget = 0;
+        }
+        waves[currentMidiIndex].wgUI.myKnobLFO2Target.setValue(newTarget);
     }
   }
 }
