@@ -289,8 +289,8 @@ class WaveGenerator
         }
         else
         {
-          line1StartX = (int)lerp((float)line1StartX, (float)midPoint, bendAmount);
-          line2EndX = (int)lerp((float)line2EndX, (float)midPoint, bendAmount);
+          line1StartX = (int)lerp((float)midPoint, (float)line1StartX, bendAmount);
+          line2EndX = (int)lerp((float)midPoint, (float)line2EndX,bendAmount);
         }
       }
       else

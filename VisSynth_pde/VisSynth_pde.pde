@@ -66,6 +66,8 @@ void draw()
   surface.setTitle(frameRate + " fps");
 }
 
+
+//MIDI Handling
 void noteOn(int channel, int pitch, int velocity)
 {
   print(pitch);
