@@ -7,6 +7,7 @@ class LFO
   float depth = 1;
   float rate;
   float theta = 0;
+  float offSet;
   
   void update()
   {      
@@ -18,7 +19,10 @@ class LFO
         float min = target.getMin();
         float max = target.getMax();
         float range = max - min;
-        float scaledValue = (normValue * range) + min;      
+        float appliedOffset = range * offSet;
+        float scaledValue = (normValue * range) + min + appliedOffset;
+        if(scaledValue < min) scaledValue = min;
+        if(scaledValue > max) scaledValue = max;       
         target.setValue(scaledValue);
       }
   }

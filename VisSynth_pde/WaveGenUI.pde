@@ -14,9 +14,11 @@ class WaveGenUI
   Knob myKnobLFO1Rate;
   Knob myKnobLFO1Depth;
   Knob myKnobLFO1Target;
+  Knob myKnobLFO1Offset;
   Knob myKnobLFO2Rate;
   Knob myKnobLFO2Depth;
   Knob myKnobLFO2Target;
+  Knob myKnobLFO2Offset;
   
   
   HSBColourPickr myColorPicker;
@@ -142,10 +144,18 @@ class WaveGenUI
                  ;
       
       
+    myKnobLFO1Offset = cp5.addKnob("lfo1Offset " +  wg.layerIndex)
+                 .setRange(-1, 1)  
+                 .setValue(0)
+                 .setPosition(width / 2 + 295, yPos)
+                 .setRadius(20)
+                 .setDragDirection(Knob.HORIZONTAL)
+                 ;
+      
     myKnobLFO2Rate = cp5.addKnob("lfo2Rate " +  wg.layerIndex)
                  .setRange(1, 0.03)
                  .setValue(1)
-                 .setPosition(width / 2 + 295, yPos)
+                 .setPosition(width / 2 + 360, yPos)
                  .setRadius(20)
                  .setDragDirection(Knob.HORIZONTAL)
                  ;
@@ -153,7 +163,7 @@ class WaveGenUI
     myKnobLFO2Depth  = cp5.addKnob("lfo2Depth " +  wg.layerIndex)
                  .setRange(0, 1)
                  .setValue(0)
-                 .setPosition(width / 2 + 360, yPos)
+                 .setPosition(width / 2 + 435, yPos)
                  .setRadius(20)
                  .setDragDirection(Knob.HORIZONTAL)
                  ;
@@ -163,11 +173,18 @@ class WaveGenUI
                  .setNumberOfTickMarks(12)
                  .snapToTickMarks(true)
                  .setValue(0)
-                 .setPosition(width / 2 + 435, yPos)
+                 .setPosition(width / 2 + 500, yPos)
                  .setRadius(20)
                  .setDragDirection(Knob.HORIZONTAL)
                  ;
-      
+
+    myKnobLFO2Offset = cp5.addKnob("lfo2Offset " +  wg.layerIndex)
+                 .setRange(-1, 1)  
+                 .setValue(0)
+                 .setPosition(width / 2 + 565, yPos)
+                 .setRadius(20)
+                 .setDragDirection(Knob.HORIZONTAL)
+                 ;
 
   }
   
@@ -224,11 +241,13 @@ class WaveGenUI
     
     wg.lfo1.rate = myKnobLFO1Rate.getValue();
     wg.lfo1.depth = myKnobLFO1Depth.getValue();
+    wg.lfo1.offSet = myKnobLFO1Offset.getValue();
     int target1 = (int)myKnobLFO1Target.getValue();   
     HandleLFOTarget(target1, wg.lfo1);
         
     wg.lfo2.rate = myKnobLFO2Rate.getValue();
     wg.lfo2.depth = myKnobLFO2Depth.getValue();
+    wg.lfo2.offSet = myKnobLFO2Offset.getValue();
     int target2 = (int)myKnobLFO2Target.getValue();   
     HandleLFOTarget(target2, wg.lfo2);
     
