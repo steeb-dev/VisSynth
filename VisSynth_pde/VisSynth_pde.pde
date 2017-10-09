@@ -18,9 +18,6 @@ void setup()
   waves = new WaveGenerator[4];
   waves[0] = new WaveGenerator(color(255,0,0,255));
   waves[0].setup(0, cp5);
-  waves[0].lfo1.target = waves[0].wgUI.myKnobRate;
-  waves[0].lfo1.rate = 200;
-  waves[0].lfo1.isActive = true;
    
 
   waves[1] = new WaveGenerator(color(0,255,0));

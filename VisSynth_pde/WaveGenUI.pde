@@ -9,6 +9,9 @@ class WaveGenUI
   Knob myKnobMask;
   Knob myKnobBend;
   Knob myKnobWaveForm;
+  Knob myKnobLFORate;
+  Knob myKnobLFODepth;
+  Knob myKnobLFOTarget;
   
   HSBColourPickr myColorPicker;
   Toggle myVertButton;
@@ -92,9 +95,35 @@ class WaveGenUI
                  .setRadius(25)
                  .setDragDirection(Knob.HORIZONTAL)
                  ;
-  
 
-     myColorPicker = new HSBColourPickr(cp5, wg.layerIndex, 710, yPos, wg.currentColor);
+    myKnobLFORate = cp5.addKnob("lfoRate " +  wg.layerIndex)
+                 .setRange(1, 1.3)
+                 .setValue(1)
+                 .setPosition(535, yPos)
+                 .setRadius(25)
+                 .setDragDirection(Knob.HORIZONTAL)
+                 ;
+
+    myKnobLFODepth  = cp5.addKnob("lfoDepth " +  wg.layerIndex)
+                 .setRange(0, 1)
+                 .setValue(0)
+                 .setPosition(600, yPos)
+                 .setRadius(25)
+                 .setDragDirection(Knob.HORIZONTAL)
+                 ;
+      
+    myKnobLFOTarget  = cp5.addKnob("lfoTarget " +  wg.layerIndex)
+                 .setRange(0, 11)  
+                 .setNumberOfTickMarks(11)
+                 .snapToTickMarks(true)
+                 .setValue(0)
+                 .setPosition(665, yPos)
+                 .setRadius(25)
+                 .setDragDirection(Knob.HORIZONTAL)
+                 ;
+      
+
+     myColorPicker = new HSBColourPickr(cp5, wg.layerIndex, 720, yPos, wg.currentColor);
   }
   
   void UpdateControls()
@@ -145,6 +174,62 @@ class WaveGenUI
     wg.mask = myKnobMask.getValue();
     wg.flipHoriz = myFlipHorizButton.getBooleanValue();
     wg.flipVert = myFlipVertButton.getBooleanValue();
+    
+    wg.lfo1.rate = myKnobLFORate.getValue();
+    wg.lfo1.depth = myKnobLFODepth.getValue();
+    
+    HandleLFOTarget();
+    
     if(updateBuffer){  wg.prepWaveBuffer();}
+  }
+  
+  void HandleLFOTarget()
+  {
+    int target = (int)myKnobLFOTarget.getValue();
+    if(target == 0)
+    {
+      wg.lfo1.isActive = false;     
+    }
+    else
+    {
+      wg.lfo1.isActive = true;
+     
+      switch(target)
+      {  
+        case 1:
+          wg.lfo1.target = myKnobRate;  
+        break;                            
+        case 2:
+          wg.lfo1.target = myKnobTheta;  
+        break;                    
+        case 3:
+          wg.lfo1.target = myKnobOffset;  
+        break;                    
+        case 4:
+          wg.lfo1.target = myKnobScroll;  
+        break;                    
+        case 5:
+          wg.lfo1.target = myKnobMask;  
+        break;        
+        case 6:
+          wg.lfo1.target = myKnobBend;  
+        break;        
+        case 7:
+          wg.lfo1.target = myKnobWaveForm;  
+        break; 
+        case 8:
+          wg.lfo1.target = myColorPicker.myHKnob;  
+        break; 
+        case 9:
+          wg.lfo1.target = myColorPicker.mySKnob;  
+        break; 
+        case 10:
+          wg.lfo1.target = myColorPicker.myBKnob;  
+        break; 
+        case 11:
+          wg.lfo1.target = myColorPicker.myAKnob;  
+        break; 
+      }
+    }
   }
 }

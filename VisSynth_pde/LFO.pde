@@ -4,7 +4,7 @@ class LFO
 {      
   boolean isActive;
   Knob target;
-  float depth = 0.25;
+  float depth = 1;
   float rate;
   float theta = 0;
   
