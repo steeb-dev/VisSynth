@@ -28,6 +28,7 @@ class WaveGenerator
   WaveGenUI wgUI;
   float bendAmount; 
   LFO lfo1;
+  LFO lfo2;
   
   //Wave Type constants
   final static int SINE = 1;
@@ -42,12 +43,14 @@ class WaveGenerator
     currentColor = c;
     lfo1 = new LFO();
     lfo1.isActive = false;
+    lfo2 = new LFO();
+    lfo2.isActive = false;
   }
 
   void setup(int index, ControlP5 cp5)
   {
-    buffWidth = 640;
-    buffHeight = 480;
+    buffWidth = width;
+    buffHeight = height * 0.65;
 
     layerIndex = index;
     
@@ -134,7 +137,8 @@ class WaveGenerator
     shapeBuffer = createShape();
     shapeBuffer.beginShape();
     wgUI.UpdateControls();
-    lfo1.update();
+    lfo1.update();    
+    lfo2.update();
     calcWave();
   
     if(!vertical)

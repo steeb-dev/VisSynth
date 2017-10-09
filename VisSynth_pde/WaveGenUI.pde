@@ -9,9 +9,13 @@ class WaveGenUI
   Knob myKnobMask;
   Knob myKnobBend;
   Knob myKnobWaveForm;
-  Knob myKnobLFORate;
-  Knob myKnobLFODepth;
-  Knob myKnobLFOTarget;
+  Knob myKnobLFO1Rate;
+  Knob myKnobLFO1Depth;
+  Knob myKnobLFO1Target;
+  Knob myKnobLFO2Rate;
+  Knob myKnobLFO2Depth;
+  Knob myKnobLFO2Target;
+  
   
   HSBColourPickr myColorPicker;
   Toggle myVertButton;
@@ -26,21 +30,21 @@ class WaveGenUI
     if(wg.layerIndex > 0) { yPos += 80 * wg.layerIndex; }
   
      myVertButton = cp5.addToggle("vert" + wg.layerIndex)
-           .setPosition(20, yPos)
-            .setSize(15,15);    
+           .setPosition(width / 2 - 610, yPos + 2)
+           .setSize(15,15);    
 
      myFlipHorizButton = cp5.addToggle("hflip" + wg.layerIndex)
-           .setPosition(45, yPos)
+           .setPosition(width / 2 - 580, yPos + 2)
             .setSize(15,15);    
 
      myFlipVertButton = cp5.addToggle("vflip" + wg.layerIndex)
-           .setPosition(45, yPos + 30)
+           .setPosition(width / 2 - 580, yPos + 32)
             .setSize(15,15);    
                 
      myKnobRate = cp5.addKnob("numWaves " + wg.layerIndex)                
                  .setRange(1,128)
                  .setValue(1)
-                 .setPosition(80, yPos)
+                 .setPosition(width / 2 - 540, yPos)
                  .setRadius(25)
                  .setDragDirection(Knob.HORIZONTAL)
                  ;
@@ -48,7 +52,7 @@ class WaveGenUI
      myKnobTheta = cp5.addKnob("effector "  + wg.layerIndex)
                  .setRange(0.01,1)
                  .setValue(0.2)
-                 .setPosition(145, yPos)
+                 .setPosition(width / 2 - 475, yPos)
                  .setRadius(25)
                  .setDragDirection(Knob.HORIZONTAL)
                  ;
@@ -56,7 +60,7 @@ class WaveGenUI
      myKnobOffset = cp5.addKnob("offset " +  wg.layerIndex)
                  .setRange(0, width/2)
                  .setValue(0)
-                 .setPosition(210, yPos)
+                 .setPosition(width / 2 - 410, yPos)
                  .setRadius(25)
                  .setDragDirection(Knob.HORIZONTAL)
                  ;
@@ -64,7 +68,7 @@ class WaveGenUI
       myKnobScroll = cp5.addKnob("scroll " +  wg.layerIndex)
                  .setRange(-1, 1)
                  .setValue(0)
-                 .setPosition(275, yPos)
+                 .setPosition(width / 2 - 345, yPos)
                  .setRadius(25)
                  .setDragDirection(Knob.HORIZONTAL)
                  ;
@@ -73,7 +77,7 @@ class WaveGenUI
                  .setRange(-1, 1)
                  .setValue(0)
                  .setNumberOfTickMarks(2)
-                 .setPosition(340, yPos)
+                 .setPosition(width / 2 - 280, yPos)
                  .setRadius(25)
                  .setDragDirection(Knob.HORIZONTAL)
                  ;
@@ -81,7 +85,7 @@ class WaveGenUI
     myKnobMask = cp5.addKnob("mask " +  wg.layerIndex)
                  .setRange(-1.0, 1.0)
                  .setValue(0)
-                 .setPosition(405, yPos)
+                 .setPosition(width / 2 - 215, yPos)
                  .setRadius(25)
                  .setDragDirection(Knob.HORIZONTAL)
                  ;
@@ -91,39 +95,68 @@ class WaveGenUI
                  .setValue(1)
                  .setNumberOfTickMarks(2)
                  .snapToTickMarks(true)
-                 .setPosition(470, yPos)
+                 .setPosition(width / 2 - 150, yPos)
                  .setRadius(25)
                  .setDragDirection(Knob.HORIZONTAL)
                  ;
 
-    myKnobLFORate = cp5.addKnob("lfoRate " +  wg.layerIndex)
+
+    myColorPicker = new HSBColourPickr(cp5, wg.layerIndex, width / 2 - 90, yPos, wg.currentColor);
+
+    myKnobLFO1Rate = cp5.addKnob("lfo1Rate " +  wg.layerIndex)
                  .setRange(1, 1.3)
                  .setValue(1)
-                 .setPosition(535, yPos)
-                 .setRadius(25)
+                 .setPosition(width / 2 + 100, yPos)
+                 .setRadius(20)
                  .setDragDirection(Knob.HORIZONTAL)
                  ;
 
-    myKnobLFODepth  = cp5.addKnob("lfoDepth " +  wg.layerIndex)
+    myKnobLFO1Depth  = cp5.addKnob("lfo1Depth " +  wg.layerIndex)
                  .setRange(0, 1)
                  .setValue(0)
-                 .setPosition(600, yPos)
-                 .setRadius(25)
+                 .setPosition(width / 2 + 165, yPos)
+                 .setRadius(20)
                  .setDragDirection(Knob.HORIZONTAL)
                  ;
       
-    myKnobLFOTarget  = cp5.addKnob("lfoTarget " +  wg.layerIndex)
+    myKnobLFO1Target  = cp5.addKnob("lfo1Target " +  wg.layerIndex)
                  .setRange(0, 11)  
                  .setNumberOfTickMarks(11)
                  .snapToTickMarks(true)
                  .setValue(0)
-                 .setPosition(665, yPos)
-                 .setRadius(25)
+                 .setPosition(width / 2 + 230, yPos)
+                 .setRadius(20)
+                 .setDragDirection(Knob.HORIZONTAL)
+                 ;
+      
+      
+    myKnobLFO2Rate = cp5.addKnob("lfo2Rate " +  wg.layerIndex)
+                 .setRange(1, 1.3)
+                 .setValue(1)
+                 .setPosition(width / 2 + 295, yPos)
+                 .setRadius(20)
+                 .setDragDirection(Knob.HORIZONTAL)
+                 ;
+
+    myKnobLFO2Depth  = cp5.addKnob("lfo2Depth " +  wg.layerIndex)
+                 .setRange(0, 1)
+                 .setValue(0)
+                 .setPosition(width / 2 + 360, yPos)
+                 .setRadius(20)
+                 .setDragDirection(Knob.HORIZONTAL)
+                 ;
+      
+    myKnobLFO2Target  = cp5.addKnob("lfo2Target " +  wg.layerIndex)
+                 .setRange(0, 11)  
+                 .setNumberOfTickMarks(11)
+                 .snapToTickMarks(true)
+                 .setValue(0)
+                 .setPosition(width / 2 + 435, yPos)
+                 .setRadius(20)
                  .setDragDirection(Knob.HORIZONTAL)
                  ;
       
 
-     myColorPicker = new HSBColourPickr(cp5, wg.layerIndex, 720, yPos, wg.currentColor);
   }
   
   void UpdateControls()
@@ -175,59 +208,63 @@ class WaveGenUI
     wg.flipHoriz = myFlipHorizButton.getBooleanValue();
     wg.flipVert = myFlipVertButton.getBooleanValue();
     
-    wg.lfo1.rate = myKnobLFORate.getValue();
-    wg.lfo1.depth = myKnobLFODepth.getValue();
-    
-    HandleLFOTarget();
+    wg.lfo1.rate = myKnobLFO1Rate.getValue();
+    wg.lfo1.depth = myKnobLFO1Depth.getValue();
+    int target1 = (int)myKnobLFO1Target.getValue();   
+    HandleLFOTarget(target1, wg.lfo1);
+        
+    wg.lfo2.rate = myKnobLFO2Rate.getValue();
+    wg.lfo2.depth = myKnobLFO2Depth.getValue();
+    int target2 = (int)myKnobLFO2Target.getValue();   
+    HandleLFOTarget(target2, wg.lfo2);
     
     if(updateBuffer){  wg.prepWaveBuffer();}
   }
   
-  void HandleLFOTarget()
+  void HandleLFOTarget(int target, LFO lfo)
   {
-    int target = (int)myKnobLFOTarget.getValue();
     if(target == 0)
     {
-      wg.lfo1.isActive = false;     
+      lfo.isActive = false;     
     }
     else
     {
-      wg.lfo1.isActive = true;
+      lfo.isActive = true;
      
       switch(target)
       {  
         case 1:
-          wg.lfo1.target = myKnobRate;  
+          lfo.target = myKnobRate;  
         break;                            
         case 2:
-          wg.lfo1.target = myKnobTheta;  
+          lfo.target = myKnobTheta;  
         break;                    
         case 3:
-          wg.lfo1.target = myKnobOffset;  
+          lfo.target = myKnobOffset;  
         break;                    
         case 4:
-          wg.lfo1.target = myKnobScroll;  
+          lfo.target = myKnobScroll;  
         break;                    
         case 5:
-          wg.lfo1.target = myKnobMask;  
+          lfo.target = myKnobMask;  
         break;        
         case 6:
-          wg.lfo1.target = myKnobBend;  
+          lfo.target = myKnobBend;  
         break;        
         case 7:
-          wg.lfo1.target = myKnobWaveForm;  
+          lfo.target = myKnobWaveForm;  
         break; 
         case 8:
-          wg.lfo1.target = myColorPicker.myHKnob;  
+          lfo.target = myColorPicker.myHKnob;  
         break; 
         case 9:
-          wg.lfo1.target = myColorPicker.mySKnob;  
+          lfo.target = myColorPicker.mySKnob;  
         break; 
         case 10:
-          wg.lfo1.target = myColorPicker.myBKnob;  
+          lfo.target = myColorPicker.myBKnob;  
         break; 
         case 11:
-          wg.lfo1.target = myColorPicker.myAKnob;  
+          lfo.target = myColorPicker.myAKnob;  
         break; 
       }
     }

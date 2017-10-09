@@ -5,7 +5,6 @@ MidiBus myBus; // The MidiBus
 int currentMidiIndex;
 boolean doFeedBack = false;
 Toggle myClearBufferButton;
-Knob myFPSKnob;
 ControlP5 cp5;
 WaveGenerator[] waves;
 CallbackListener cb;
@@ -13,9 +12,11 @@ CallbackListener cb;
 void setup()
 {  
   frameRate(60);
+  currentMidiIndex = 0;
   myBus = new MidiBus(this, "Akai MPD32",-1); 
   cp5 = new ControlP5(this);
-  size(900, 900, P3D); 
+    
+  fullScreen(P3D); 
   waves = new WaveGenerator[4];
   waves[0] = new WaveGenerator(color(255,0,0,255));
   waves[0].setup(0, cp5);
@@ -32,27 +33,13 @@ void setup()
   
   
    myClearBufferButton = cp5.addToggle("feedback")
-         .setPosition(width/2, (int)waves[0].buffHeight + 20)
+         .setPosition(width/ 2 - 40, (int)waves[0].buffHeight + 20)
           .setSize(30,30)
           .setValue(0); 
-       
-    myFPSKnob = cp5.addKnob("FPS")                
-                 .setRange(12, 60)
-                 .setValue(60)
-                 .setPosition(width/2 + 50, (int)waves[0].buffHeight + 20)
-                 .setRadius(20)
-                 .setDragDirection(Knob.HORIZONTAL)
-                 ;
-                 
+                
           
     background(0);   
 }
-
-void FPS()
-{
-  frameRate(myFPSKnob.getValue());
-}
-
 
 void draw()
 {
@@ -78,8 +65,17 @@ void draw()
   }
   
   surface.setTitle(frameRate + " fps");
+  
+  drawSelectedMidi();
 }
 
+void drawSelectedMidi()
+{
+  int index = currentMidiIndex + 1;
+  stroke(255);
+  fill(0, 0, 0, 0);
+  rect(width / 2 - 625 , (int)waves[0].buffHeight + (index * 78), 1125, 75);
+}
 
 //MIDI Handling
 void noteOn(int channel, int pitch, int velocity)
@@ -94,7 +90,7 @@ void noteOn(int channel, int pitch, int velocity)
 
 void controllerChange(int channel, int number, int value) {
 
-  //1 -4 colour
+  //9-12 colour
   if(number > 8 && number <= 12)
   {
     HSBColourPickr cpicker = waves[currentMidiIndex].wgUI.myColorPicker;
@@ -105,7 +101,7 @@ void controllerChange(int channel, int number, int value) {
     Knob knob;
     switch(number)
     {      
-      //5-16 - continous knobs 
+      //1-8 - continous knobs 
       case 1:
         knob = waves[currentMidiIndex].wgUI.myKnobRate;
         HandleKnobChange(knob, value);      
@@ -134,12 +130,41 @@ void controllerChange(int channel, int number, int value) {
         knob = waves[currentMidiIndex].wgUI.myKnobWaveForm;
         HandleKnobChange(knob, value);       
       break;
+     case 13:
+        knob = waves[currentMidiIndex].wgUI.myKnobLFO1Rate;
+        HandleKnobChange(knob, value);       
+      break;
+     case 14:
+        knob = waves[currentMidiIndex].wgUI.myKnobLFO1Depth;
+        HandleKnobChange(knob, value);       
+      break;
+     case 15:
+        knob = waves[currentMidiIndex].wgUI.myKnobLFO2Rate;
+        HandleKnobChange(knob, value);       
+      break;
+     case 16:
+        knob = waves[currentMidiIndex].wgUI.myKnobLFO2Depth;
+        HandleKnobChange(knob, value);       
+      break;
+
       //17-24 buttons
       case 17:
         myClearBufferButton.setValue(!myClearBufferButton.getBooleanValue());
        break;
       case 18:
         waves[currentMidiIndex].wgUI.myVertButton.setValue(!waves[currentMidiIndex].wgUI.myVertButton.getBooleanValue());
+        break;
+      case 19:
+        waves[currentMidiIndex].wgUI.myFlipHorizButton.setValue(!waves[currentMidiIndex].wgUI.myFlipHorizButton.getBooleanValue());
+       break;
+      case 20:
+        waves[currentMidiIndex].wgUI.myFlipVertButton.setValue(!waves[currentMidiIndex].wgUI.myFlipVertButton.getBooleanValue());
+        break;
+      case 21:
+        waves[currentMidiIndex].wgUI.myFlipVertButton.setValue(!waves[currentMidiIndex].wgUI.myFlipVertButton.getBooleanValue());
+        break;
+      case 22:
+        waves[currentMidiIndex].wgUI.myFlipVertButton.setValue(!waves[currentMidiIndex].wgUI.myFlipVertButton.getBooleanValue());
         break;
 
     }

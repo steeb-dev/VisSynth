@@ -10,8 +10,8 @@ class LFO
   
   void update()
   {      
-      if(isActive)
-      {
+      if(isActive && depth > 0)
+      {        
         theta += TWO_PI * rate;
         float normValue = sin(theta) * depth; 
         normValue = (normValue + 1)/2;
