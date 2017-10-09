@@ -5,6 +5,7 @@ MidiBus myBus; // The MidiBus
 int currentMidiIndex;
 boolean doFeedBack = false;
 Toggle myClearBufferButton;
+Knob myFPSKnob;
 ControlP5 cp5;
 WaveGenerator[] waves;
 CallbackListener cb;
@@ -34,9 +35,22 @@ void setup()
          .setPosition(width/2, (int)waves[0].buffHeight + 20)
           .setSize(30,30)
           .setValue(0); 
-          
+       
+    myFPSKnob = cp5.addKnob("FPS")                
+                 .setRange(12, 60)
+                 .setValue(60)
+                 .setPosition(width/2 + 50, (int)waves[0].buffHeight + 20)
+                 .setRadius(20)
+                 .setDragDirection(Knob.HORIZONTAL)
+                 ;
+                 
           
     background(0);   
+}
+
+void FPS()
+{
+  frameRate(myFPSKnob.getValue());
 }
 
 
