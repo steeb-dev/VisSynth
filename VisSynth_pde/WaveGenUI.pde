@@ -94,8 +94,8 @@ class WaveGenUI
     myColorPicker = new HSBColourPickr(cp5, wg.layerIndex, width / 2 - 70, yPos, wg.currentColor, wg.lfo1, wg.lfo2);
 
     myKnobLFO1Rate = cp5.addKnob("lfo1Rate " +  wg.layerIndex)
-                 .setRange(0, 0.03)
-                 .setValue(1)
+                 .setRange(0.00, 0.3)
+                 .setValue(0.01)
                  .setPosition(width / 2 + 190, yPos)
                  .setRadius(25)
                  .setDragDirection(Knob.HORIZONTAL)
@@ -110,8 +110,8 @@ class WaveGenUI
                  ;
     
     myKnobLFO2Rate = cp5.addKnob("lfo2Rate " +  wg.layerIndex)
-                 .setRange(1, 0.03)
-                 .setValue(1)
+                 .setRange(0.00, 0.20)
+                 .setValue(0.01)
                  .setPosition(width / 2 + 320, yPos)
                  .setRadius(25)
                  .setDragDirection(Knob.HORIZONTAL)

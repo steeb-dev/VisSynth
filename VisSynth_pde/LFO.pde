@@ -9,7 +9,7 @@ class LFO
   
   void update()
   {      
-     theta += TWO_PI * rate;
+     theta += rate;
      sinValue = sin(theta); 
   }
 }
