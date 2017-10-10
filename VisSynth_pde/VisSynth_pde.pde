@@ -34,8 +34,8 @@ void setup()
   
   
    myClearBufferButton = cp5.addToggle("feedback")
-         .setPosition(width/ 2 - 40, (int)waves[0].buffHeight + 20)
-          .setSize(30,30)
+         .setPosition(80, (int)waves[0].buffHeight + 10)
+          .setSize(40,40)
           .setValue(0); 
                 
           
@@ -81,10 +81,9 @@ void draw()
 
 void drawSelectedMidi()
 {
-  int index = currentMidiIndex + 1;
   stroke(255);
   fill(0, 0, 0, 0);
-  rect(width / 2 - 690 , (int)waves[0].buffHeight + (index * 78), 1320, 75);
+  rect(width / 2 - 690 , (int)waves[0].buffHeight + (currentMidiIndex * 102), 1050, 105);
 }
 
 //MIDI Handling

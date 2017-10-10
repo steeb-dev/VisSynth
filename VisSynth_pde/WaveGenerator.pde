@@ -44,9 +44,7 @@ class WaveGenerator
   {
     currentColor = c;
     lfo1 = new LFO();
-    lfo1.isActive = false;
     lfo2 = new LFO();
-    lfo2.isActive = false;
   }
 
   void setup(int index, ControlP5 cp5)
@@ -135,10 +133,11 @@ class WaveGenerator
 
   void drawWave(int frameCounter)
   {    
-    wgUI.UpdateControls();
     lfo1.update();    
     lfo2.update();
-   
+
+    wgUI.UpdateControls();
+  
     if(frameCounter % frameDraw == 0)
     {
       shapeBuffer = createShape();
