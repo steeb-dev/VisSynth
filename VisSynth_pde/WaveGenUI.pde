@@ -91,37 +91,37 @@ class WaveGenUI
     myKnobFrameDraw.setDragDirection(Knob.HORIZONTAL);
 
 
-    myColorPicker = new HSBColourPickr(cp5, wg.layerIndex, width / 2 - 90, yPos, wg.currentColor);
+    myColorPicker = new HSBColourPickr(cp5, wg.layerIndex, width / 2 - 70, yPos, wg.currentColor, wg.lfo1, wg.lfo2);
 
     myKnobLFO1Rate = cp5.addKnob("lfo1Rate " +  wg.layerIndex)
                  .setRange(0, 0.03)
                  .setValue(1)
-                 .setPosition(width / 2 + 115, yPos)
-                 .setRadius(20)
+                 .setPosition(width / 2 + 190, yPos)
+                 .setRadius(25)
                  .setDragDirection(Knob.HORIZONTAL)
                  ;
 
     myKnobLFO1Depth  = cp5.addKnob("lfo1Depth " +  wg.layerIndex)
                  .setRange(0, 1)
                  .setValue(0)
-                 .setPosition(width / 2 + 165, yPos)
-                 .setRadius(20)
+                 .setPosition(width / 2 + 250, yPos)
+                 .setRadius(25)
                  .setDragDirection(Knob.HORIZONTAL)
                  ;
     
     myKnobLFO2Rate = cp5.addKnob("lfo2Rate " +  wg.layerIndex)
                  .setRange(1, 0.03)
                  .setValue(1)
-                 .setPosition(width / 2 + 240, yPos)
-                 .setRadius(20)
+                 .setPosition(width / 2 + 320, yPos)
+                 .setRadius(25)
                  .setDragDirection(Knob.HORIZONTAL)
                  ;
 
     myKnobLFO2Depth  = cp5.addKnob("lfo2Depth " +  wg.layerIndex)
                  .setRange(0, 1)
                  .setValue(0)
-                 .setPosition(width / 2 + 285, yPos)
-                 .setRadius(20)
+                 .setPosition(width / 2 + 380, yPos)
+                 .setRadius(25)
                  .setDragDirection(Knob.HORIZONTAL);
 
   }

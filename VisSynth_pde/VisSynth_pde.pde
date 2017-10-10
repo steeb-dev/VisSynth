@@ -83,7 +83,7 @@ void drawSelectedMidi()
 {
   stroke(255);
   fill(0, 0, 0, 0);
-  rect(width / 2 - 690 , (int)waves[0].buffHeight + (currentMidiIndex * 102), 1050, 105);
+  rect(width / 2 - 700 , (int)waves[0].buffHeight + (currentMidiIndex * 102), 1150, 105);
 }
 
 //MIDI Handling

@@ -15,7 +15,7 @@ class LFOKnob extends Knob
     super.setRadius(radius);
 
     lfo1Button = theControlP5.addToggle(theName + "lfo1")
-           .setPosition(x + 10, y - 20)
+           .setPosition(x + 5, y - 20)
            .setSize(15,15)
            .setLabel("")
            .setValue(0);    

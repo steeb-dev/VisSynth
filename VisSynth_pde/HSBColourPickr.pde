@@ -3,10 +3,10 @@ class HSBColourPickr
   int xPos;
   int yPos;
   
-  Knob myHKnob;
-  Knob mySKnob;
-  Knob myBKnob;
-  Knob myAKnob;
+  LFOKnob myHKnob;
+  LFOKnob mySKnob;
+  LFOKnob myBKnob;
+  LFOKnob myAKnob;
   
   float currentHVal;
   float currentSVal;
@@ -15,51 +15,37 @@ class HSBColourPickr
   
   color currentColor;
   
-  HSBColourPickr(ControlP5 cp5, int index, int _xPos, int _yPos, color _color)
+  HSBColourPickr(ControlP5 cp5, int index, int _xPos, int _yPos, color _color, LFO lfo1, LFO lfo2)
   {
     xPos = _xPos;
-    yPos = _yPos +   10;
+    yPos = _yPos;
     currentColor = _color;
     
-    myHKnob = cp5.addKnob("Hue" + index)
-             .setRange(0, 252)
-             .setValue(hue(currentColor))
-             .setPosition(xPos + 10, yPos)
-             .setRadius(19)
-             .setDragDirection(Knob.HORIZONTAL)
-             ;
+    myHKnob = new LFOKnob(cp5, "Hue" + index, lfo1, lfo2, xPos + 10, yPos, 25);
+    myHKnob.setRange(0, 252);
+    myHKnob.setValue(hue(currentColor));
+    myHKnob.setDragDirection(Knob.HORIZONTAL);
                               
-    mySKnob = cp5.addKnob("Sat" + index)
-             .setRange(0, 247)
-             .setValue(saturation(currentColor))
-             .setPosition(xPos + 50, yPos)
-             .setRadius(19)
-             .setDragDirection(Knob.HORIZONTAL)
-             ;
+    mySKnob = new LFOKnob(cp5, "Sat" + index, lfo1, lfo2, xPos + 65, yPos, 25);
+    mySKnob.setRange(0, 247);
+    mySKnob.setValue(saturation(currentColor));
+    mySKnob.setDragDirection(Knob.HORIZONTAL);
                 
-    myBKnob = cp5.addKnob("Bright" + index)
-             .setRange(35, 247)
-             .setValue(brightness(currentColor))
-             .setPosition(xPos + 90, yPos)
-             .setRadius(19)
-             .setDragDirection(Knob.HORIZONTAL)
-             ;
+    myBKnob = new LFOKnob(cp5, "Bright" + index, lfo1, lfo2, xPos + 120, yPos, 25);
+    myBKnob.setRange(35, 247);
+    myBKnob.setValue(brightness(currentColor));
+    myBKnob.setDragDirection(Knob.HORIZONTAL);
                                            
-    myAKnob = cp5.addKnob("Alpha" + index)
-             .setRange(0, 255)
-             .setValue(alpha(currentColor))
-             .setPosition(xPos + 130, yPos)
-             .setRadius(19)
-             .setDragDirection(Knob.HORIZONTAL)
-             ;
-             
-             
-        currentHVal = myHKnob.getValue();
-        currentSVal = mySKnob.getValue();
-        currentBVal = myBKnob.getValue();
-        currentAVal = myAKnob.getValue();
-
-                     
+    myAKnob = new LFOKnob(cp5, "Alpha" + index, lfo1, lfo2, xPos + 175, yPos, 25);
+    myAKnob.setRange(0, 255);
+    myAKnob.setValue(alpha(currentColor));
+    myAKnob.setDragDirection(Knob.HORIZONTAL);       
+    
+    currentHVal = myHKnob.getValue();
+    currentSVal = mySKnob.getValue();
+    currentBVal = myBKnob.getValue();
+    currentAVal = myAKnob.getValue();
+    
     }
     
     void update()
@@ -82,6 +68,6 @@ class HSBColourPickr
       }     
       stroke(currentColor);
       fill(currentColor);
-      rect(xPos, yPos, 180, 40);
+      rect(xPos, yPos -25, 230, 90);
     }    
 }
