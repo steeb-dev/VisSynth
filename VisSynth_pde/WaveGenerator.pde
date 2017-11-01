@@ -36,8 +36,7 @@ class WaveGenerator
   final static int SINE = 1;
   final static int PULSE = 2;
   final static int RAMPUP = 3;
-  final static int RAMPDOWN = 4;
-  final static int TRI = 5;  
+  final static int NOISE = 4;
   
   //Constructor
   WaveGenerator(color c)
@@ -50,7 +49,7 @@ class WaveGenerator
   void setup(int index, ControlP5 cp5)
   {
     buffWidth = width;
-    buffHeight = height * 0.65;
+    buffHeight = height * 0.60;
 
     layerIndex = index;
     
@@ -91,6 +90,9 @@ class WaveGenerator
       case RAMPUP:
         CalcRampUpWave();
       break;
+      case NOISE:
+        CalcNoiseWave();
+      break;
     }
   }
 
@@ -130,6 +132,16 @@ class WaveGenerator
         waveValues[i] = color(red(currentColor), green(currentColor), blue(currentColor) ,( alpha(currentColor) * ((float)i / (float)waveValues.length)) * thetaRate);
     }
   }
+
+
+  void CalcNoiseWave()
+  {   
+    for (int i = 0; i < waveValues.length; i++) 
+    {
+        waveValues[i] = color(red(currentColor), green(currentColor), blue(currentColor) ,( alpha(currentColor) * random(0,1)));
+    }
+  }
+
 
   void drawWave(int frameCounter)
   {    

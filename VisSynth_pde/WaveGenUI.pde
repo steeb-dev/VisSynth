@@ -56,7 +56,7 @@ class WaveGenUI
      myKnobTheta.setDragDirection(Knob.HORIZONTAL);
                  
      myKnobOffset = new LFOKnob(cp5, "offset " +  wg.layerIndex, wg.lfo1, wg.lfo2,width / 2 - 475, yPos, 25);
-     myKnobOffset.setRange(0, width/2);
+     myKnobOffset.setRange(0, 1);
      myKnobOffset.setValue(0);
      myKnobOffset.setDragDirection(Knob.HORIZONTAL);
        
@@ -77,9 +77,9 @@ class WaveGenUI
     myKnobMask.setDragDirection(Knob.HORIZONTAL);
                  
     myKnobWaveForm = new LFOKnob(cp5, "waveForm " +  wg.layerIndex, wg.lfo1, wg.lfo2, width / 2 - 215, yPos, 25);
-    myKnobWaveForm.setRange(1, 3);
+    myKnobWaveForm.setRange(1, 4);
     myKnobWaveForm.setValue(1);
-    myKnobWaveForm.setNumberOfTickMarks(2);
+    myKnobWaveForm.setNumberOfTickMarks(3);
     myKnobWaveForm.snapToTickMarks(true);
     myKnobWaveForm.setDragDirection(Knob.HORIZONTAL);
 
@@ -157,6 +157,9 @@ class WaveGenUI
       {wg.scrollOffset = wg.scrollOffset - (int)wg.buffWidth;}
       if(wg.scrollOffset < 0)
       {wg.scrollOffset = (int)wg.buffWidth + wg.scrollOffset;}
+      
+      float normOffset  = myKnobOffset.getValue();
+      wg.offset =  normOffset * wg.buffHeight/2;
     }
     else
     {      
@@ -168,10 +171,11 @@ class WaveGenUI
       {wg.scrollOffset = (int)wg.buffHeight + wg.scrollOffset;}
       
       wg.frameDraw = (int)myKnobFrameDraw.getValue();
+      float normOffset  = myKnobOffset.getValue();
+      wg.offset =  normOffset * wg.buffWidth/2;
 
   }
     
-    wg.offset = myKnobOffset.getValue();
     wg.bendAmount = myKnobBend.getValue();
     wg.mask = myKnobMask.getValue();
     wg.flipHoriz = myFlipHorizButton.getBooleanValue();
