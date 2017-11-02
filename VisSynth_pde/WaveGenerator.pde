@@ -29,9 +29,7 @@ class WaveGenerator
   float bendAmount; 
   LFO lfo1;
   LFO lfo2;
-  
-  int frameDraw = 1;
-  
+    
   //Wave Type constants
   final static int SINE = 1;
   final static int PULSE = 2;
@@ -161,8 +159,6 @@ class WaveGenerator
 
     wgUI.UpdateControls();
   
-    if(frameCounter % frameDraw == 0)
-    {
       shapeBuffer = createShape();
       shapeBuffer.beginShape();
       calcWave();
@@ -177,7 +173,6 @@ class WaveGenerator
       }
       
       shapeBuffer.endShape(CLOSE);  
-    }
   }
   
   void drawHoriz()

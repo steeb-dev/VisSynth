@@ -10,7 +10,6 @@ class WaveGenUI
   LFOKnob myKnobMask;
   LFOKnob myKnobBend;
   LFOKnob myKnobWaveForm;
-  LFOKnob myKnobFrameDraw;
   
   Knob myKnobLFO1Rate;
   Knob myKnobLFO1Depth;
@@ -80,14 +79,6 @@ class WaveGenUI
     myKnobWaveForm.setNumberOfTickMarks(3);
     myKnobWaveForm.snapToTickMarks(true);
     myKnobWaveForm.setDragDirection(Knob.HORIZONTAL);
-
-    myKnobFrameDraw = new LFOKnob(cp5, "frameDraw " +  wg.layerIndex, wg.lfo1, wg.lfo2, width / 2 - 150, yPos, 25);
-    myKnobFrameDraw.setRange(1, 4);
-    myKnobFrameDraw.setValue(1);
-    myKnobFrameDraw.setNumberOfTickMarks(3);
-    myKnobFrameDraw.snapToTickMarks(true);
-    myKnobFrameDraw.setDragDirection(Knob.HORIZONTAL);
-
 
     myColorPicker = new HSBColourPickr(cp5, wg.layerIndex, width / 2 - 70, yPos, wg.currentColor, wg.lfo1, wg.lfo2);
 
@@ -168,7 +159,6 @@ class WaveGenUI
       if(wg.scrollOffset < 0)
       {wg.scrollOffset = (int)wg.buffHeight + wg.scrollOffset;}
       
-      wg.frameDraw = (int)myKnobFrameDraw.getValue();
       float normOffset  = myKnobOffset.getValue();
       wg.offset =  normOffset * wg.buffWidth/2;
 
