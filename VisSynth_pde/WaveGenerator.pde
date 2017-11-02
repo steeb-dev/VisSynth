@@ -2,33 +2,31 @@ import controlP5.*;
 
 class WaveGenerator
 {    
-  //Properties
-  color currentColor;
+  //Properties  
+  float buffWidth;
+  float buffHeight;
   color[] waveValues;
   float theta = 0;
   float thetaRate = 0.2;
   float dx;
+  int scrollOffset = 0;
+  PShape shapeBuffer;
+  int layerIndex; 
+  WaveGenUI wgUI;
+
+  //UI control props
+  color currentColor;
   float offset;
   float numWaves = 5;
-  int scrollOffset = 0;
   int scrollRate = 0;
   boolean vertical = false; 
-
   int mirrorState = 0;
-  
-  
-  PShape shapeBuffer;
-
-  int layerIndex; 
-  float mask;
   int waveType;
-  
-  float buffWidth;
-  float buffHeight;
-  WaveGenUI wgUI;
   float bendAmount; 
+  float mask;
   LFO lfo1;
   LFO lfo2;
+  
     
   //Wave Type constants
   final static int SINE = 1;
@@ -67,9 +65,7 @@ class WaveGenerator
     wgUI.Setup(this, cp5);
     prepWaveBuffer();
   }
-  
- 
-  
+    
   void prepWaveBuffer()
   {
     if(!vertical)
@@ -153,7 +149,7 @@ class WaveGenerator
   }
 
 
-  void drawWave(int frameCounter)
+  void drawWave()
   {    
     lfo1.update();    
     lfo2.update();

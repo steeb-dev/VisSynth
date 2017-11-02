@@ -10,6 +10,7 @@ ControlP5 cp5;
 WaveGenerator[] waves;
 CallbackListener cb;
 int frameCounter;
+boolean loadMode = false;
 
 void setup()
 {  
@@ -42,6 +43,41 @@ void setup()
     background(0);   
 }
 
+void keyPressed() 
+{
+   if (key >= '0' && key <= '9') 
+   {
+      int keyIndex = key;
+      if(loadMode)
+      {    
+        background(0);
+        String[] loadList = loadStrings("preset" + str(keyIndex) + ".txt");  
+        waves[0].wgUI.deSerialise(loadList[0]);
+        waves[1].wgUI.deSerialise(loadList[1]);   
+        waves[2].wgUI.deSerialise(loadList[2]);    
+        waves[3].wgUI.deSerialise(loadList[3]);
+        loadMode = false;
+      }
+      else
+      {
+        String payload1 = waves[0].wgUI.serialise();
+        String payload2 = waves[1].wgUI.serialise();   
+        String payload3 = waves[2].wgUI.serialise();    
+        String payload4 = waves[3].wgUI.serialise();
+        
+        String[] list = {payload1, payload2, payload3, payload4};
+      
+        // Writes the strings to a file, each on a separate line
+        saveStrings("preset" + str(keyIndex) + ".txt", list);
+      }
+  }
+  
+  if (key == 'l') 
+  {
+    loadMode = true;    
+  }
+}
+
 void draw()
 {
   frameCounter++;
@@ -59,7 +95,7 @@ void draw()
     
   for(int i = 0; i < waves.length; i++)
   {  
-    waves[i].drawWave(frameCounter);
+    waves[i].drawWave();
     drawShape(waves[i].shapeBuffer, waves[i].mirrorState);
   }
   
@@ -157,7 +193,6 @@ void controllerChange(int channel, int number, int value) {
   else  
   {
     Knob knob;
-    int newTarget;   
     switch(number)
     {   
       //1-8 - continous knobs 
@@ -219,41 +254,6 @@ void controllerChange(int channel, int number, int value) {
         break;
       case 20:
         break;
-      case 21:  
-        newTarget = (int)waves[currentMidiIndex].wgUI.myKnobLFO1Target.getValue();
-        newTarget--; 
-        if(newTarget < 0)
-        {
-          newTarget = (int)waves[currentMidiIndex].wgUI.myKnobLFO1Target.getMax();
-        }
-        waves[currentMidiIndex].wgUI.myKnobLFO1Target.setValue(newTarget);
-       break;
-      case 22:
-        newTarget = (int)waves[currentMidiIndex].wgUI.myKnobLFO1Target.getValue();
-        newTarget++; 
-        if(newTarget > (int)waves[currentMidiIndex].wgUI.myKnobLFO1Target.getMax())
-        {
-          newTarget = 0;
-        }
-        waves[currentMidiIndex].wgUI.myKnobLFO1Target.setValue(newTarget);
-        break;
-      case 23:
-        newTarget = (int)waves[currentMidiIndex].wgUI.myKnobLFO2Target.getValue();
-        newTarget--; 
-        if(newTarget < 0)
-        {
-          newTarget = (int)waves[currentMidiIndex].wgUI.myKnobLFO2Target.getMax();
-        }
-        waves[currentMidiIndex].wgUI.myKnobLFO2Target.setValue(newTarget);
-       break;
-      case 24:
-        newTarget = (int)waves[currentMidiIndex].wgUI.myKnobLFO2Target.getValue();
-        newTarget++; 
-        if(newTarget > (int)waves[currentMidiIndex].wgUI.myKnobLFO2Target.getMax())
-        {
-          newTarget = 0;
-        }
-        waves[currentMidiIndex].wgUI.myKnobLFO2Target.setValue(newTarget);
     }
   }
 }

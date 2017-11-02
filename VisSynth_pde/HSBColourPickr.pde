@@ -15,6 +15,15 @@ class HSBColourPickr
   
   color currentColor;
   
+  void setColor(color c)
+  {
+    currentColor = c;
+    myHKnob.setValue(hue(c));
+    mySKnob.setValue(saturation(c));
+    myBKnob.setValue(brightness(c));
+    myAKnob.setValue(alpha(c));
+  }
+  
   HSBColourPickr(ControlP5 cp5, int index, int _xPos, int _yPos, color _color, LFO lfo1, LFO lfo2)
   {
     xPos = _xPos;
