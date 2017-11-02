@@ -106,6 +106,25 @@ void drawShape(PShape vector, int mirrorState) {
       vector.scale(1,-1);
       shape(vector, 0,  waves[0].buffHeight);    
     break;
+    case WaveGenerator.MIRRORHV:
+      vector.scale(0.5,0.5);     
+      shape(vector, 0, 0);
+      vector.scale(-1,1);
+      shape(vector, waves[0].buffWidth, 0);      
+      vector.scale(1,-1);
+      shape(vector,  waves[0].buffWidth, waves[0].buffHeight);   
+      vector.scale(-1,1);
+      shape(vector, 0, waves[0].buffHeight);   
+    break;
+    case WaveGenerator.MIRROROVERLAPHV:   
+      shape(vector, 0, 0);
+      vector.scale(-1,1);
+      shape(vector, waves[0].buffWidth, 0);      
+      vector.scale(1,-1);
+      shape(vector,  waves[0].buffWidth, waves[0].buffHeight);   
+      vector.scale(-1,1);
+      shape(vector, 0, waves[0].buffHeight);   
+    break;
   }
 }
 

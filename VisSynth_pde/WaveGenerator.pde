@@ -45,7 +45,8 @@ class WaveGenerator
   final static int MIRRORVERT = 4;
   final static int MIRRORVERTOVERLAP = 5;
   final static int FLIPVERT = 6;
-  
+  final static int MIRRORHV = 7;
+  final static int MIRROROVERLAPHV = 8;
   
   //Constructor
   WaveGenerator(color c)

@@ -34,9 +34,9 @@ class WaveGenUI
            .setSize(15,15);    
 
      myKnobMirrorState = new LFOKnob(cp5, "mirror" + wg.layerIndex, wg.lfo1, wg.lfo2, width / 2 - 670, yPos, 25);
-     myKnobMirrorState.setRange(0,6);
+     myKnobMirrorState.setRange(0,8);
      myKnobMirrorState.setValue(0);
-     myKnobMirrorState.setNumberOfTickMarks(6);     
+     myKnobMirrorState.setNumberOfTickMarks(8);     
      myKnobMirrorState.snapToTickMarks(true);
      myKnobMirrorState.setDragDirection(Knob.HORIZONTAL);
 
