@@ -14,8 +14,8 @@ class WaveGenerator
   int scrollRate = 0;
   boolean vertical = false; 
 
-  boolean flipVert = false;
-  boolean flipHoriz = false;
+  int mirrorState = 0;
+  
   
   PShape shapeBuffer;
 
@@ -37,6 +37,17 @@ class WaveGenerator
   final static int PULSE = 2;
   final static int RAMPUP = 3;
   final static int NOISE = 4;
+  
+  
+  //Mirror constants
+  final static int DEFAULT = 0;
+  final static int MIRRORHORIZ = 1;
+  final static int MIRRORHORIZOVERLAP = 2;
+  final static int FLIPHORIZ = 3;
+  final static int MIRRORVERT = 4;
+  final static int MIRRORVERTOVERLAP = 5;
+  final static int FLIPVERT = 6;
+  
   
   //Constructor
   WaveGenerator(color c)
@@ -165,15 +176,7 @@ class WaveGenerator
         drawVert();
       }
       
-      shapeBuffer.endShape(CLOSE);
-      if(flipHoriz)
-      {
-        shapeBuffer.scale(-1,1);
-      }
-      if(flipVert)
-      {
-        shapeBuffer.scale(1,-1);
-      }
+      shapeBuffer.endShape(CLOSE);  
     }
   }
   

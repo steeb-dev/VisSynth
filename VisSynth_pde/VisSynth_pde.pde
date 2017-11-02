@@ -5,6 +5,9 @@ MidiBus myBus; // The MidiBus
 int currentMidiIndex;
 boolean doFeedBack = false;
 Toggle myClearBufferButton;
+Toggle myYMirrorButton;
+Toggle myXMirrorButton;
+
 ControlP5 cp5;
 WaveGenerator[] waves;
 CallbackListener cb;
@@ -37,7 +40,6 @@ void setup()
          .setPosition(80, (int)waves[0].buffHeight + 10)
           .setSize(40,40)
           .setValue(0); 
-                
           
     background(0);   
 }
@@ -62,21 +64,56 @@ void draw()
     waves[i].drawWave(frameCounter);
     int x = (int)((width - waves[0].buffWidth) /2);
     int y = 0;
-    if(waves[i].flipHoriz)
-    {
-      x += waves[i].buffWidth;
-    }
-    if(waves[i].flipVert)
-    {
-      y += waves[i].buffHeight;
-    }
 
-    shape(waves[i].shapeBuffer,  x,y);
+    drawShape(waves[i].shapeBuffer,x, y, waves[i].mirrorState);
   }
   
+
   surface.setTitle(frameRate + " fps");
   
   drawSelectedMidi();
+}
+
+void drawShape(PShape vector, int x, int y, int mirrorState) {
+
+  switch(mirrorState)
+  {
+    case WaveGenerator.DEFAULT:
+         shape(vector, x, y);
+    break;
+    case WaveGenerator.MIRRORHORIZ:
+      shape(vector, x, y, waves[0].buffWidth/2, waves[0].buffHeight);
+      vector.scale(-1,1);
+      shape(vector, waves[0].buffWidth, y, waves[0].buffWidth/2, waves[0].buffHeight);    
+    break;
+    case WaveGenerator.MIRRORHORIZOVERLAP:
+      shape(vector, x, y);
+      vector.scale(-1,1);
+      x += waves[0].buffWidth;
+      shape(vector, x, y);    
+    break;
+    case WaveGenerator.FLIPHORIZ:
+      vector.scale(-1,1);
+      x += waves[0].buffWidth;
+      shape(vector, x, y);    
+    break;
+    case WaveGenerator.MIRRORVERT:
+      shape(vector, x, y, waves[0].buffWidth, waves[0].buffHeight/2);
+      vector.scale(1,-1);
+      shape(vector, x, waves[0].buffHeight, waves[0].buffWidth, waves[0].buffHeight/2);    
+    break;
+    case WaveGenerator.MIRRORVERTOVERLAP:
+      shape(vector, x, y);
+      vector.scale(1,-1);
+      y += waves[0].buffHeight;
+      shape(vector, x, y);    
+    break;
+    case WaveGenerator.FLIPVERT:
+      vector.scale(1,-1);
+      y += waves[0].buffHeight;
+      shape(vector, x, y);    
+    break;
+  }
 }
 
 void drawSelectedMidi()
@@ -169,10 +206,8 @@ void controllerChange(int channel, int number, int value) {
         waves[currentMidiIndex].wgUI.myVertButton.setValue(!waves[currentMidiIndex].wgUI.myVertButton.getBooleanValue());
         break;
       case 19:
-        waves[currentMidiIndex].wgUI.myFlipHorizButton.setValue(!waves[currentMidiIndex].wgUI.myFlipHorizButton.getBooleanValue());
         break;
       case 20:
-        waves[currentMidiIndex].wgUI.myFlipVertButton.setValue(!waves[currentMidiIndex].wgUI.myFlipVertButton.getBooleanValue());
         break;
       case 21:  
         newTarget = (int)waves[currentMidiIndex].wgUI.myKnobLFO1Target.getValue();

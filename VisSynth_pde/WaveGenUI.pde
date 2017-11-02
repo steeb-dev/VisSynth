@@ -2,6 +2,7 @@
 class WaveGenUI
 {      
   WaveGenerator wg;
+  LFOKnob myKnobMirrorState;
   LFOKnob myKnobRate;
   LFOKnob myKnobTheta;  
   LFOKnob myKnobOffset;
@@ -22,10 +23,7 @@ class WaveGenUI
     
   HSBColourPickr myColorPicker;
   Toggle myVertButton;
-  
-  Toggle myFlipHorizButton;
-  Toggle myFlipVertButton;
-  
+    
   void Setup(WaveGenerator _wg, ControlP5 cp5)
   {
      wg = _wg;
@@ -33,16 +31,16 @@ class WaveGenUI
     if(wg.layerIndex > 0) { yPos += 100 * wg.layerIndex; }
   
      myVertButton = cp5.addToggle("vert" + wg.layerIndex)
-           .setPosition(width / 2 - 675, yPos + 2)
+           .setPosition(width / 2 - 710, yPos + 2)
            .setSize(15,15);    
 
-     myFlipHorizButton = cp5.addToggle("hflip" + wg.layerIndex)
-           .setPosition(width / 2 - 640, yPos + 2)
-            .setSize(15,15);    
+     myKnobMirrorState = new LFOKnob(cp5, "mirror" + wg.layerIndex, wg.lfo1, wg.lfo2, width / 2 - 670, yPos, 25);
+     myKnobMirrorState.setRange(0,6);
+     myKnobMirrorState.setValue(0);
+     myKnobMirrorState.setNumberOfTickMarks(6);     
+     myKnobMirrorState.snapToTickMarks(true);
+     myKnobMirrorState.setDragDirection(Knob.HORIZONTAL);
 
-     myFlipVertButton = cp5.addToggle("vflip" + wg.layerIndex)
-           .setPosition(width / 2 - 640, yPos + 32)
-            .setSize(15,15);    
                 
      myKnobRate = new LFOKnob(cp5, "numWaves " + wg.layerIndex, wg.lfo1, wg.lfo2,width / 2 - 605, yPos, 25);                
      myKnobRate.setRange(1,128);
@@ -178,8 +176,8 @@ class WaveGenUI
     
     wg.bendAmount = myKnobBend.getValue();
     wg.mask = myKnobMask.getValue();
-    wg.flipHoriz = myFlipHorizButton.getBooleanValue();
-    wg.flipVert = myFlipVertButton.getBooleanValue();
+    wg.mirrorState = (int)myKnobMirrorState.getValue();
+
     
     wg.lfo1.rate = myKnobLFO1Rate.getValue();
     wg.lfo1.depth = myKnobLFO1Depth.getValue();
