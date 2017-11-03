@@ -10,7 +10,7 @@ ControlP5 cp5;
 WaveGenerator[] waves;
 CallbackListener cb;
 int frameCounter;
-boolean loadMode = false;
+boolean saveMode = false;
 
 void setup()
 {  
@@ -48,7 +48,7 @@ void keyPressed()
    if (key >= '0' && key <= '9') 
    {
       int keyIndex = key;
-      if(loadMode)
+      if(!saveMode)
       {    
         background(0);
         String[] loadList = loadStrings("preset" + str(keyIndex) + ".txt");  
@@ -56,7 +56,7 @@ void keyPressed()
         waves[1].wgUI.deSerialise(loadList[1]);   
         waves[2].wgUI.deSerialise(loadList[2]);    
         waves[3].wgUI.deSerialise(loadList[3]);
-        loadMode = false;
+
       }
       else
       {
@@ -69,12 +69,13 @@ void keyPressed()
       
         // Writes the strings to a file, each on a separate line
         saveStrings("preset" + str(keyIndex) + ".txt", list);
+        saveMode = false;
       }
   }
   
-  if (key == 'l') 
+  if (key == 's') 
   {
-    loadMode = true;    
+    saveMode = true;    
   }
 }
 
