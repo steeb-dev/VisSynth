@@ -142,9 +142,11 @@ class WaveGenerator
 
   void CalcNoiseWave()
   {   
+    float t = theta;
     for (int i = 0; i < waveValues.length; i++) 
     {
-        waveValues[i] = color(red(currentColor), green(currentColor), blue(currentColor) ,( alpha(currentColor) * random(0,1)));
+        waveValues[i] = color(red(currentColor), green(currentColor), blue(currentColor) ,( alpha(currentColor) * noise(t)));  
+        t += (thetaRate * 100);
     }
   }
 
