@@ -256,7 +256,7 @@ class WaveGenerator
         if(vert)
         {
           if(mask > 0)
-          { //<>//
+          { //<>// //<>//
              rowEnd = (int)buffWidth;
              rowStart = (int)(mask * buffWidth);          
           }

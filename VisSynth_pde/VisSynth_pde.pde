@@ -175,18 +175,19 @@ void drawSelectedMidi()
 //MIDI Handling
 void noteOn(int channel, int pitch, int velocity)
 {
-  print(pitch);
   if(pitch >0 && pitch < 5)
   {
     currentMidiIndex = pitch -1;
+  }
+  if(pitch == 16)
+  {
+    myClearBufferButton.setValue(!myClearBufferButton.getBooleanValue());
   }
 }
 
 
 void controllerChange(int channel, int number, int value) {
-
-  //9-12 colour
-  if(number > 8 && number <= 12)
+  if(number > 12 && number <= 16)
   {
     HSBColourPickr cpicker = waves[currentMidiIndex].wgUI.myColorPicker;
     HandleColourChange(number, value, cpicker);
@@ -194,67 +195,109 @@ void controllerChange(int channel, int number, int value) {
   else  
   {
     Knob knob;
+    LFOKnob lfoKnob;
     switch(number)
     {   
       //1-8 - continous knobs 
       case 1:
-        knob = waves[currentMidiIndex].wgUI.myKnobRate;
-        HandleKnobChange(knob, value);      
+        knob = waves[currentMidiIndex].wgUI.myKnobMirrorState;
+        HandleKnobChange(knob, value);    
       break;
       case 2:      
-        knob = waves[currentMidiIndex].wgUI.myKnobTheta;
+        knob = waves[currentMidiIndex].wgUI.myKnobRate;
         HandleKnobChange(knob, value); 
       break;
       case 3:      
-        knob = waves[currentMidiIndex].wgUI.myKnobOffset;
+        knob = waves[currentMidiIndex].wgUI.myKnobTheta;
         HandleKnobChange(knob, value); 
       break;
       case 4:
-        knob = waves[currentMidiIndex].wgUI.myKnobScroll;
+        knob = waves[currentMidiIndex].wgUI.myKnobOffset;
         HandleKnobChange(knob, value);       
       break;
       case 5:
-        knob = waves[currentMidiIndex].wgUI.myKnobBend;
+        knob = waves[currentMidiIndex].wgUI.myKnobScroll;
         HandleKnobChange(knob, value);       
       break;
       case 6:
-        knob = waves[currentMidiIndex].wgUI.myKnobMask;
+        knob = waves[currentMidiIndex].wgUI.myKnobBend;
         HandleKnobChange(knob, value);       
       break;
       case 7:
-        knob = waves[currentMidiIndex].wgUI.myKnobWaveForm;
+        knob = waves[currentMidiIndex].wgUI.myKnobMask;
         HandleKnobChange(knob, value);       
       break;
-      case 8:
+      case 8:   
+        knob = waves[currentMidiIndex].wgUI.myKnobWaveForm;
+        HandleKnobChange(knob, value);      
       break;
-     case 13:
+     case 9:
         knob = waves[currentMidiIndex].wgUI.myKnobLFO1Rate;
         HandleKnobChange(knob, value);       
       break;
-     case 14:
+     case 10:
         knob = waves[currentMidiIndex].wgUI.myKnobLFO1Depth;
         HandleKnobChange(knob, value);       
       break;
-     case 15:
+     case 11:
         knob = waves[currentMidiIndex].wgUI.myKnobLFO2Rate;
         HandleKnobChange(knob, value);       
       break;
-     case 16:
+     case 12:
         knob = waves[currentMidiIndex].wgUI.myKnobLFO2Depth;
         HandleKnobChange(knob, value);       
       break;
 
       //17-24 buttons
       case 17:
-        myClearBufferButton.setValue(!myClearBufferButton.getBooleanValue());
-       break;
+        lfoKnob = waves[currentMidiIndex].wgUI.myKnobMirrorState;
+        HandleLFOChange(lfoKnob);     
+        break;
       case 18:
-        waves[currentMidiIndex].wgUI.myVertButton.setValue(!waves[currentMidiIndex].wgUI.myVertButton.getBooleanValue());
+        lfoKnob = waves[currentMidiIndex].wgUI.myKnobRate;
+        HandleLFOChange(lfoKnob);    
         break;
       case 19:
+        lfoKnob = waves[currentMidiIndex].wgUI.myKnobTheta;
+        HandleLFOChange(lfoKnob);    
         break;
       case 20:
+        lfoKnob = waves[currentMidiIndex].wgUI.myKnobOffset;
+        HandleLFOChange(lfoKnob);    
         break;
+      case 21:
+        lfoKnob = waves[currentMidiIndex].wgUI.myKnobScroll;
+        HandleLFOChange(lfoKnob);    
+        break;        
+      case 22:
+        lfoKnob = waves[currentMidiIndex].wgUI.myKnobBend;
+        HandleLFOChange(lfoKnob);    
+        break;        
+      case 23:
+        lfoKnob = waves[currentMidiIndex].wgUI.myKnobMask;
+        HandleLFOChange(lfoKnob);    
+        break;        
+      case 24:
+        lfoKnob = waves[currentMidiIndex].wgUI.myKnobWaveForm;
+        HandleLFOChange(lfoKnob);    
+        break;
+        
+      case 115:
+        lfoKnob =  waves[currentMidiIndex].wgUI.myColorPicker.myHKnob;
+        HandleLFOChange(lfoKnob);       
+        break;
+     case 116:
+      lfoKnob =  waves[currentMidiIndex].wgUI.myColorPicker.mySKnob;
+      HandleLFOChange(lfoKnob);                 
+      break;
+     case 117:
+      lfoKnob =  waves[currentMidiIndex].wgUI.myColorPicker.myBKnob;
+      HandleLFOChange(lfoKnob);                 
+      break;
+     case 118:
+      lfoKnob =  waves[currentMidiIndex].wgUI.myColorPicker.myAKnob;
+      HandleLFOChange(lfoKnob);                 
+      break;
     }
   }
 }
@@ -269,9 +312,31 @@ void HandleKnobChange(Knob knob, int value)
       knob.setValue(scaledValue);
 }
 
+void HandleLFOChange(LFOKnob knob)
+{  
+   boolean lfo1Active = knob.lfo1Button.getBooleanValue();
+   boolean lfo2Active = knob.lfo2Button.getBooleanValue();
+   if(lfo1Active && lfo2Active)
+   {
+     knob.lfo1Button.setValue(0);
+   }
+   else if(lfo1Active && !lfo2Active)
+   {
+     knob.lfo2Button.setValue(1);     
+   }
+   else if(!lfo1Active && lfo2Active)
+   {
+     knob.lfo2Button.setValue(0);          
+   }
+   else if(!lfo1Active && !lfo2Active)
+   {
+     knob.lfo1Button.setValue(1);          
+   }
+}
+
 void HandleColourChange(int number, int value, HSBColourPickr cpicker)
 {
-    number = number -8;
+    number = number -12;
     switch(number) 
     {    
     case 1: 
