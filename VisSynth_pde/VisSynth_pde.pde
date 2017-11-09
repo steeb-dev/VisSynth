@@ -11,7 +11,7 @@ WaveGenerator[] waves;
 CallbackListener cb;
 int frameCounter;
 boolean saveMode = false;
-
+boolean newPatch = false;
 void setup()
 {  
   frameRate(60);
@@ -49,26 +49,12 @@ void keyPressed()
    {
       int keyIndex = key;
       if(!saveMode)
-      {    
-        background(0);
-        String[] loadList = loadStrings("preset" + str(keyIndex) + ".txt");  
-        waves[0].wgUI.deSerialise(loadList[0]);
-        waves[1].wgUI.deSerialise(loadList[1]);   
-        waves[2].wgUI.deSerialise(loadList[2]);    
-        waves[3].wgUI.deSerialise(loadList[3]);
-
+      {          
+        load("preset" + str(keyIndex) + ".txt");
       }
       else
       {
-        String payload1 = waves[0].wgUI.serialise();
-        String payload2 = waves[1].wgUI.serialise();   
-        String payload3 = waves[2].wgUI.serialise();    
-        String payload4 = waves[3].wgUI.serialise();
-        
-        String[] list = {payload1, payload2, payload3, payload4};
-      
-        // Writes the strings to a file, each on a separate line
-        saveStrings("preset" + str(keyIndex) + ".txt", list);
+        save("preset" + str(keyIndex) + ".txt");
         saveMode = false;
       }
   }
@@ -79,13 +65,42 @@ void keyPressed()
   }
 }
 
+void save(String fileName)
+{
+      String payload1 = waves[0].wgUI.serialise();
+      String payload2 = waves[1].wgUI.serialise();   
+      String payload3 = waves[2].wgUI.serialise();    
+      String payload4 = waves[3].wgUI.serialise();
+      
+      String[] list = {payload1, payload2, payload3, payload4};
+    
+      // Writes the strings to a file, each on a separate line
+      saveStrings(fileName, list);
+}
+
+void load(String fileName)
+{
+  
+      try
+      {
+        String[] loadList = loadStrings(fileName);  
+        waves[0].wgUI.deSerialise(loadList[0]);
+        waves[1].wgUI.deSerialise(loadList[1]);   
+        waves[2].wgUI.deSerialise(loadList[2]);    
+        waves[3].wgUI.deSerialise(loadList[3]);
+        newPatch = true;
+      }
+      catch(Exception e)
+      {}
+}
+
 void draw()
 {
-  frameCounter++;
-  if(frameCounter > 4)
-    frameCounter = 1;
-  if(!myClearBufferButton.getBooleanValue())
-    background(0);  
+  if(!myClearBufferButton.getBooleanValue() || newPatch)
+  {
+    background(0); 
+    newPatch = false;
+  }
   else
   {
     stroke(0, 0, 0, 0);
@@ -179,10 +194,21 @@ void noteOn(int channel, int pitch, int velocity)
   {
     currentMidiIndex = pitch -1;
   }
-  if(pitch == 16)
+  else if(pitch == 13)
   {
     myClearBufferButton.setValue(!myClearBufferButton.getBooleanValue());
   }
+  else if(pitch > 16 && pitch <= 32)
+  {
+    //Save
+    save("presetm" + str(pitch - 16) + ".txt");
+ 
+  }
+  else if(pitch > 32 && pitch <= 48)
+  {
+    //Load    
+      load("presetm" + str(pitch - 32) + ".txt");
+   }
 }
 
 
