@@ -115,9 +115,6 @@ void draw()
     drawShape(waves[i].shapeBuffer, waves[i].mirrorState);
   }
   
-
-  surface.setTitle(frameRate + " fps");
-  
   drawSelectedMidi();
 }
 
@@ -197,6 +194,10 @@ void noteOn(int channel, int pitch, int velocity)
   else if(pitch == 13)
   {
     myClearBufferButton.setValue(!myClearBufferButton.getBooleanValue());
+  }
+  else if(pitch == 16)
+  {
+    waves[currentMidiIndex].wgUI.myVertButton.setValue(!waves[currentMidiIndex].wgUI.myVertButton.getBooleanValue());
   }
   else if(pitch > 16 && pitch <= 32)
   {
